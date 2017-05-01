@@ -25,5 +25,21 @@ module.exports = {
 				args.msg.author.send();
 			},
 		},
+		{
+			name: `eval`,
+			aliases: [`evaluate`, `parse`, `js`, `script`],
+			help: `Executes provided scripts as the bot`,
+			usage: `Eval <script>`,
+			dm: true,
+			owner: true,
+			func: (args) => {
+				try {
+					let complete = eval(args.args);
+					args.msg.channel.send(`Script completed, returned: ${complete}`);
+				} catch (e) {
+					args.msg.channel.send(`Script failed, error: ${e}`);
+				}
+			},
+		},
 	],
 };

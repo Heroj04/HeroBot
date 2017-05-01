@@ -8,6 +8,7 @@ var bot = new Discord.Client();
 var modules = {};
 
 // Command object class
+/*
 function command(obj) {
 	// Required properties
 	this.name = obj.name;
@@ -18,7 +19,9 @@ function command(obj) {
 	this.help = obj.help === undefined ? `No help info was provided for this command` : obj.help;
 	this.usage = obj.usage === undefined ? `No usage info was provided with this command` : obj.usage;
 	this.dm = obj.dm === undefined ? false : obj.dm;
+	this.owner = obj.owner === undefined ? false : obj.owner;
 }
+*/
 
 bot.on(`ready`, () => {
 	bot.setGame(`@Radio Help`);
@@ -30,6 +33,7 @@ bot.on(`message`, (msg) => {
 	}
 
 	let cmdString = msg.content.toLowercase().split(` `)[1];
+	console.log(`[COMMAND] (${new Date().getHours()}: ${new Date().getMinutes()}) ${msg.author.username}#${msg.author.discriminator}: ${msg.content}`);
 	// Check messages recieved for commands
 
 	for (var mod in modules) {
@@ -46,9 +50,33 @@ bot.on(`message`, (msg) => {
 			}
 		}
 		if (found) {
-			found.func();
+			if (!found.owner || msg.author.id === config.ownerID) {
+				if (msg.channel.type === `text` || (msg.channel.type !== `text` && found.dm)) {
+					found.func({
+						msg: msg,
+						bot: bot,
+						library: `./library/${mod.name.toLowercase().replace(/\s+/g, '')}`,
+					});
+				} else {
+					msg.channel.send(`Sorry that command cannot be used in this channel`)
+						.then(m => {
+							m.delete(10000);
+						});
+					msg.delete(10000);
+				}
+			} else {
+				msg.channel.send(`You do not have permission for that command.`)
+				.then(m => {
+					m.delete(10000);
+				});
+				msg.delete(10000);
+			}
 		} else {
-			msg.channel.send(`That command does not exist.`);
+			msg.channel.send(`That command does not exist.`)
+			.then(m => {
+				m.delete(10000);
+			});
+			msg.delete(10000);
 		}
 	}
 });
@@ -61,10 +89,10 @@ function loadModules(files) {
 		if (stats.isFile()) {
 			try {
 				modules[file.substring(0, file.indexOf(`.js`))] = require(`./modules/${file}`);
-				console.log(`Loaded module ${file}`);
+				console.log(`[INFO] Loaded module ${file}`);
 				modTotal++;
 			} catch (e) {
-				console.log(`[ERROR] Could not load module ${file}: ${e}`);
+				console.log(`\x1b[31m[ERROR] Could not load module ${file}: ${e.message}\x1b[0m`);
 			}
 		}
 	});
@@ -74,28 +102,62 @@ function loadModules(files) {
 function initialise() {
 	// Do things to set up the bot
 
-	console.log(`Starting Bot ...`);
-	fs.readdir(`modules`, (err, files) => {
+	console.log(`[INFO] Starting Bot ...`);
+	fs.readdir(`./`, (err, files) => {
 		if (err) {
 			return console.error(err);
 		}
-
-		console.log(`Loading Modules ...`);
-		let modTotal = loadModules(files);
-		console.log(`Loaded [${modTotal}/${files.length}] modules.`);
-
-		if (modTotal > 0) {
-			console.log(`Logging in ...`);
-			bot.login(config.botToken)
-				.then(() => {
-					console.log(`Bot successfully logged in.`);
-				})
-				.catch((error) => {
-					console.error(`[ERROR] Issue Logging in: ${err}`);
-				});
-		} else {
-			console.error(`[ERROR] No modules were loaded`);
+		if (files === undefined || files.length < 1) {
+			return console.error(`[ERROR] No files are available including this one. (This error shouldn't appear but if it does you've done something wrong)`);
 		}
+		let mods = false,
+			lib = false;
+		for (var i = 0; i < files.length; i++) {
+			let stats = fs.statSync(files[i]);
+			if (files[i] === `modules` && stats.isDirectory()) {
+				mods = true;
+			} else if (files[i] === `library` && stats.isDirectory()) {
+				lib = true;
+			}
+		}
+		if (!mods) {
+			console.log(`[INFO] Modules folder not found, creating one now.`);
+			fs.mkdir(`modules`, e => {
+				if (e) {
+					throw e;
+				}
+			});
+		}
+		if (!lib) {
+			console.log(`[INFO] Library folder not found, creating one now.`);
+			fs.mkdir(`library`, e => {
+				if (e) {
+					throw e;
+				}
+			});
+		}
+		console.log(`[INFO] Loading Modules ...`);
+		fs.readdir(`modules`, (e, modFiles) => {
+			if (e) {
+				throw e;
+			}
+
+			let modTotal = loadModules(modFiles);
+			console.log(`[INFO] Loaded [${modTotal}/${modFiles.length}] modules.`);
+
+			if (modTotal > 0) {
+				console.log(`[INFO] Logging in ...`);
+				bot.login(config.botToken)
+					.then(() => {
+						console.log(`[INFO] Bot successfully logged in.`);
+					})
+					.catch(error => {
+						console.error(`\x1b[31m[ERROR] Issue Logging in: ${err}\x1b[0m`);
+					});
+			} else {
+				console.error(`\x1b[31m[ERROR] No modules were loaded\x1b[0m`);
+			}
+		});
 	});
 }
 
