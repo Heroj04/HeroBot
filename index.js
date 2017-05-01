@@ -58,6 +58,9 @@ bot.on(`message`, (msg) => {
 						bot: bot,
 						library: `./library/${mod.name.toLowercase().replace(/\s+/g, '')}`,
 						modules: modules,
+						args: msg.content.toLowercase()
+							.split(` `)
+							.splice(0, 2),
 					});
 				} else {
 					msg.channel.send(`Sorry that command cannot be used in this channel`)
