@@ -10,10 +10,17 @@ module.exports = {
 			name: `help`,
 			aliases: [`halp`, `?`],
 			help: `Displays help information for commands and modules.`,
-			usage: 'Help <command or module>',
+			usage: 'Help [command or module]',
 			dm: true,
 			func: (args) => {
-				args.msg.author.send();
+				let compMsg = `--- Available Commands ---`;
+				args.modules.forEach(module => {
+					compMsg += `\n\n~${module.name}~\n${module.description}`;
+					module.commands.forEach(command => {
+						compMsg += `\n - ${command.name}`;
+					});
+				});
+				args.msg.author.send(compMsg);
 			},
 		},
 		{
@@ -22,7 +29,7 @@ module.exports = {
 			help: `Displays information about the bot`,
 			dm: true,
 			func: (args) => {
-				args.msg.author.send();
+				args.msg.author.send(`I am Radiobot, a Discord bot built by Heroj04 (@jackrfootner).\nMy Source code is available at www.github.com/Heroj04/Radiobot`);
 			},
 		},
 		{
