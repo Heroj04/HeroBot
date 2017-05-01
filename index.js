@@ -32,7 +32,7 @@ bot.on(`message`, (msg) => {
 		return;
 	}
 
-	let split = msg.content.toLowercase()
+	let split = msg.content.toLowerCase()
 		.split(` `);
 	let cmdString = split[1];
 	split.splice(0, 2);
@@ -58,7 +58,7 @@ bot.on(`message`, (msg) => {
 					found.func({
 						msg: msg,
 						bot: bot,
-						library: `./library/${mod.name.toLowercase().replace(/\s+/g, '')}`,
+						library: `./library/${mod.name.toLowerCase().replace(/\s+/g, '')}`,
 						modules: modules,
 						args: split,
 					});
@@ -157,7 +157,7 @@ function initialise() {
 
 			let modTotal = loadModules(modFiles);
 			console.log(`[INFO] Loaded [${modTotal}/${modFiles.length}] modules.`);
-
+			console.log(modules);
 			if (modTotal > 0) {
 				console.log(`[INFO] Logging in ...`);
 				bot.login(config.botToken)
