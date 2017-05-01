@@ -1,7 +1,7 @@
 const Discord = require(`discord.js`);
 const fs = require(`fs`);
 
-const config = require(`./config.js`);
+var config;
 
 var bot = new Discord.Client();
 
@@ -24,7 +24,7 @@ function command(obj) {
 */
 
 bot.on(`ready`, () => {
-	bot.setGame(`@Radio Help`);
+	bot.user.setGame(`@Radio Help`);
 });
 
 bot.on(`message`, (msg) => {
@@ -56,6 +56,7 @@ bot.on(`message`, (msg) => {
 						msg: msg,
 						bot: bot,
 						library: `./library/${mod.name.toLowercase().replace(/\s+/g, '')}`,
+						modules: modules,
 					});
 				} else {
 					msg.channel.send(`Sorry that command cannot be used in this channel`)
@@ -111,31 +112,32 @@ function initialise() {
 			return console.error(`[ERROR] No files are available including this one. (This error shouldn't appear but if it does you've done something wrong)`);
 		}
 		let mods = false,
-			lib = false;
+			lib = false,
+			conf = false;
 		for (var i = 0; i < files.length; i++) {
 			let stats = fs.statSync(files[i]);
 			if (files[i] === `modules` && stats.isDirectory()) {
 				mods = true;
 			} else if (files[i] === `library` && stats.isDirectory()) {
 				lib = true;
+			} else if (files[i] === `config.js` && stats.isFile()) {
+				conf = true;
 			}
 		}
 		if (!mods) {
 			console.log(`[INFO] Modules folder not found, creating one now.`);
-			fs.mkdir(`modules`, e => {
-				if (e) {
-					throw e;
-				}
-			});
+			fs.mkdirSync(`modules`);
 		}
 		if (!lib) {
 			console.log(`[INFO] Library folder not found, creating one now.`);
-			fs.mkdir(`library`, e => {
-				if (e) {
-					throw e;
-				}
-			});
+			fs.mkdirSync(`library`);
 		}
+		if (!conf) {
+			console.log(`[INFO] Config file not found, creating one now.`);
+			fs.writeFileSync(`./config.js`, fs.readFileSync(`./example_config.js`));
+		}
+		console.log(`[INFO] Loading config file ...`);
+		config = require(`./config.js`);
 		console.log(`[INFO] Loading Modules ...`);
 		fs.readdir(`modules`, (e, modFiles) => {
 			if (e) {
