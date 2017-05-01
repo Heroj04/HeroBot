@@ -51,7 +51,7 @@ bot.on(`message`, (msg) => {
 			}
 		}
 		if (found) {
-			if (!found.owner || msg.author.id === config.ownerID) {
+			if (!found.owner || config.ownerID.indexOf(msg.auther.id) >= 0) {
 				if (msg.channel.type === `text` || (msg.channel.type !== `text` && found.dm)) {
 					found.func({
 						msg: msg,
