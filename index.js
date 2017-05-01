@@ -32,7 +32,8 @@ bot.on(`message`, (msg) => {
 		return;
 	}
 
-	let cmdString = msg.content.toLowercase().split(` `)[1];
+	let cmdString = msg.content.toLowercase()
+		.split(` `)[1];
 	console.log(`[COMMAND] (${new Date().getHours()}: ${new Date().getMinutes()}) ${msg.author.username}#${msg.author.discriminator}: ${msg.content}`);
 	// Check messages recieved for commands
 
@@ -67,16 +68,16 @@ bot.on(`message`, (msg) => {
 				}
 			} else {
 				msg.channel.send(`You do not have permission for that command.`)
-				.then(m => {
-					m.delete(10000);
-				});
+					.then(m => {
+						m.delete(10000);
+					});
 				msg.delete(10000);
 			}
 		} else {
 			msg.channel.send(`That command does not exist.`)
-			.then(m => {
-				m.delete(10000);
-			});
+				.then(m => {
+					m.delete(10000);
+				});
 			msg.delete(10000);
 		}
 	}
@@ -90,6 +91,13 @@ function loadModules(files) {
 		if (stats.isFile()) {
 			try {
 				modules[file.substring(0, file.indexOf(`.js`))] = require(`./modules/${file}`);
+				modules[file.substring(0, file.indexOf(`.js`))].commands.forEach(command => {
+					command.aliases = command.aliases === undefined ? [] : command.aliases;
+					command.help = command.help === undefined ? `No help info was provided for this command` : command.help;
+					command.usage = command.usage === undefined ? `No usage info was provided with this command` : command.usage;
+					command.dm = command.dm === undefined ? false : command.dm;
+					command.owner = command.owner === undefined ? false : command.owner;
+				});
 				console.log(`[INFO] Loaded module ${file}`);
 				modTotal++;
 			} catch (e) {
