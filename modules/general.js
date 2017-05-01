@@ -29,7 +29,7 @@ module.exports = {
 			help: `Displays information about the bot`,
 			dm: true,
 			func: (args) => {
-				args.msg.author.send(`I am Radiobot, a Discord bot built by Heroj04 (@jackrfootner).\nMy Source code is available at www.github.com/Heroj04/Radiobot`);
+				args.msg.channel.send(`I am Radiobot, a Discord bot built by Heroj04 (@jackrfootner).\nMy Source code is available at www.github.com/Heroj04/Radiobot`);
 			},
 		},
 		{
@@ -41,7 +41,7 @@ module.exports = {
 			owner: true,
 			func: (args) => {
 				try {
-					let complete = eval(args.args);
+					let complete = eval(args.args.join[` `]);
 					args.msg.channel.send(`Script completed, returned: ${complete}`);
 				} catch (e) {
 					args.msg.channel.send(`Script failed, error: ${e}`);
