@@ -41,5 +41,24 @@ module.exports = {
 				}
 			},
 		},
+		{
+			name: `listids`,
+			aliases: [`ids`],
+			help: `Lists the IDs of users and channels in this guild.`,
+			func: (args) => {
+				let compMsg = `Guild ID: ${args.msg.guild.id}`;
+				let textChannels = args.msg.guild.filter((channel, index, array) => channel.type === `text`);
+				let voiceChannels = args.msg.guild.filter((channel, index, array) => channel.type === `voice`);
+				compMsg += `\n\n~Text Channels~`;
+				textChannels.forEach(channel => {
+					compMsg += `\n${channel.name} ID: ${channel.id}`;
+				});
+				compMsg += `\n\n~Voice Channels~`;
+				voiceChannels.forEach(channel => {
+					compMsg += `\n${channel.name} ID: ${channel.id}`;
+				});
+				args.author.send(compMsg);
+			},
+		},
 	],
 };
