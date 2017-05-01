@@ -32,8 +32,10 @@ bot.on(`message`, (msg) => {
 		return;
 	}
 
-	let cmdString = msg.content.toLowercase()
-		.split(` `)[1];
+	let split = msg.content.toLowercase()
+		.split(` `);
+	let cmdString = split[1];
+	split.splice(0, 2);
 	console.log(`[COMMAND] (${new Date().getHours()}: ${new Date().getMinutes()}) ${msg.author.username}#${msg.author.discriminator}: ${msg.content}`);
 	// Check messages recieved for commands
 
@@ -58,9 +60,7 @@ bot.on(`message`, (msg) => {
 						bot: bot,
 						library: `./library/${mod.name.toLowercase().replace(/\s+/g, '')}`,
 						modules: modules,
-						args: msg.content.toLowercase()
-							.split(` `)
-							.splice(0, 2),
+						args: split,
 					});
 				} else {
 					msg.channel.send(`Sorry that command cannot be used in this channel`)
