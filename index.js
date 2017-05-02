@@ -25,6 +25,22 @@ function command(obj) {
 
 bot.on(`ready`, () => {
 	bot.user.setGame(config.gameText);
+	console.log(`[INFO] Running module startup functions ...`);
+	modules.forEach(mod => {
+		if (typeof mod.startup === `function`) {
+			try {
+				mod.startup({
+					bot: bot,
+					library: `./library/${mod.moduleOptions.name.toLowerCase().replace(/\s+/g, '')}`,
+					modules: modules,
+				});
+			} catch (e) {
+				console.error(`[ERROR] ${mod.moduleOptions.name} module encountered an error in startup function: ${e}`);
+				console.log(`[INFO] Disabling ${mod.moduleOptions.name} module`);
+				delete modules[modules.indexOf(mod)];
+			}
+		}
+	});
 });
 
 bot.on(`message`, (msg) => {
@@ -32,18 +48,20 @@ bot.on(`message`, (msg) => {
 		return;
 	}
 
-	if (msg.channel.type === `text`) {
-		let cont = msg.content.substring(0, 2) + msg.content.substring(3, msg.content.length - 3);
-		if (!cont.startsWith(`<@${bot.user.id}>`)) {
-			return;
-		}
+	let cont;
+	if (msg.content[2] === `!`) {
+		cont = msg.content.substring(0, 2) + msg.content.substring(3, msg.content.length - 3);
+	} else {
+		cont = msg.content;
+	}
+	if (!cont.startsWith(`<@${bot.user.id}>`)) {
+		return;
 	}
 
 	let split = msg.content.toLowerCase()
 		.split(` `);
 	let cmdString = split[1];
 	split.splice(0, 2);
-	console.log(`[COMMAND] (${new Date().getHours()}: ${new Date().getMinutes()}) ${msg.author.tag}: ${msg.cleanContent}`);
 	// Check messages recieved for commands
 
 	let found = false;
@@ -60,6 +78,7 @@ bot.on(`message`, (msg) => {
 			break;
 		}
 	}
+	let reason;
 	if (found) {
 		if (!found.owner || config.ownerID.indexOf(msg.author.id) >= 0) {
 			if (msg.channel.type === `text` || (msg.channel.type !== `text` && found.dm)) {
@@ -76,6 +95,7 @@ bot.on(`message`, (msg) => {
 						m.delete(10000);
 					});
 				msg.delete(10000);
+				reason = `Channel`;
 			}
 		} else {
 			msg.channel.send(`You do not have permission for that command.`)
@@ -83,6 +103,7 @@ bot.on(`message`, (msg) => {
 					m.delete(10000);
 				});
 			msg.delete(10000);
+			reason = `Permission`;
 		}
 	} else {
 		msg.channel.send(`That command does not exist.`)
@@ -90,6 +111,12 @@ bot.on(`message`, (msg) => {
 				m.delete(10000);
 			});
 		msg.delete(10000);
+		reason = `Exist`;
+	}
+	if (reason) {
+		console.log(`[COMMAND] [Failed: ${reason}] (${new Date().getHours()}: ${new Date().getMinutes()}) ${msg.author.tag}: ${msg.cleanContent}`);
+	} else {
+		console.log(`[COMMAND] [Success] (${new Date().getHours()}: ${new Date().getMinutes()}) ${msg.author.tag}: ${msg.cleanContent}`);
 	}
 });
 
@@ -108,6 +135,13 @@ function loadModules(files) {
 					command.dm = command.dm === undefined ? false : command.dm;
 					command.owner = command.owner === undefined ? false : command.owner;
 				});
+				try {
+					fs.mkdirSync(`./library/${modules[modules.length - 1].moduleOptions.name.toLowerCase().replace(/\s+/g, '')}`);
+				} catch (error) {
+					if (error.code !== `EEXIST`) {
+						throw error;
+					}
+				}
 				console.log(`[INFO] Loaded module ${file}`);
 				modTotal++;
 			} catch (e) {
