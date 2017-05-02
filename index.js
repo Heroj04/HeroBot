@@ -167,11 +167,17 @@ function initialise() {
 			if (modTotal > 0) {
 				modules.forEach(mod => {
 					if (typeof mod.startup === `function`) {
-						mod.startup({
-							bot: bot,
-							library: `./library/${mod.moduleOptions.name.toLowerCase().replace(/\s+/g, '')}`,
-							modules: modules,
-						});
+						try {
+							mod.startup({
+								bot: bot,
+								library: `./library/${mod.moduleOptions.name.toLowerCase().replace(/\s+/g, '')}`,
+								modules: modules,
+							});
+						} catch (error) {
+							console.error(`[ERROR] ${mod.moduleOptions.name} module encountered an error in startup function: ${e}`);
+							console.log(`[INFO] Disabling ${mod.moduleOptions.name} module`);
+							delete modules[modules.indexOf(mod)];
+						}
 					}
 				});
 				console.log(`[INFO] Logging in ...`);
