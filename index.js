@@ -43,7 +43,7 @@ bot.on(`message`, (msg) => {
 		.split(` `);
 	let cmdString = split[1];
 	split.splice(0, 2);
-	console.log(`[COMMAND] (${new Date().getHours()}: ${new Date().getMinutes()}) ${msg.author.username}#${msg.author.discriminator}: ${msg.content}`);
+	console.log(`[COMMAND] (${new Date().getHours()}: ${new Date().getMinutes()}) ${msg.author.tag}: ${msg.cleanContent}`);
 	// Check messages recieved for commands
 
 	let found = false;
