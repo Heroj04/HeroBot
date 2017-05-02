@@ -123,6 +123,13 @@ function loadModules(files) {
 					command.dm = command.dm === undefined ? false : command.dm;
 					command.owner = command.owner === undefined ? false : command.owner;
 				});
+				try {
+					fs.mkdirSync(`./library/${modules[modules.length - 1].moduleOptions.name.toLowerCase().replace(/\s+/g, '')}`);
+				} catch (error) {
+					if (error.code !== `EEXIST`) {
+						throw error;
+					}
+				}
 				console.log(`[INFO] Loaded module ${file}`);
 				modTotal++;
 			} catch (e) {

@@ -41,3 +41,6 @@ jspm_packages
 
 # Personal Config File
 config.js
+
+# Module Libraries
+library
