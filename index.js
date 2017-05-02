@@ -32,6 +32,10 @@ bot.on(`message`, (msg) => {
 		return;
 	}
 
+	if (!msg.content.startsWith(bot.user)) {
+		return;
+	}
+
 	let split = msg.content.toLowerCase()
 		.split(` `);
 	let cmdString = split[1];
