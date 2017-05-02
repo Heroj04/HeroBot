@@ -25,6 +25,21 @@ function command(obj) {
 
 bot.on(`ready`, () => {
 	bot.user.setGame(config.gameText);
+	modules.forEach(mod => {
+		if (typeof mod.startup === `function`) {
+			try {
+				mod.startup({
+					bot: bot,
+					library: `./library/${mod.moduleOptions.name.toLowerCase().replace(/\s+/g, '')}`,
+					modules: modules,
+				});
+			} catch (e) {
+				console.error(`[ERROR] ${mod.moduleOptions.name} module encountered an error in startup function: ${e}`);
+				console.log(`[INFO] Disabling ${mod.moduleOptions.name} module`);
+				delete modules[modules.indexOf(mod)];
+			}
+		}
+	});
 });
 
 bot.on(`message`, (msg) => {
@@ -165,15 +180,6 @@ function initialise() {
 			let modTotal = loadModules(modFiles);
 			console.log(`[INFO] Loaded [${modTotal}/${modFiles.length}] modules.`);
 			if (modTotal > 0) {
-				modules.forEach(mod => {
-					if (typeof mod.startup === `function`) {
-						mod.startup({
-							bot: bot,
-							library: `./library/${mod.moduleOptions.name.toLowerCase().replace(/\s+/g, '')}`,
-							modules: modules,
-						});
-					}
-				});
 				console.log(`[INFO] Logging in ...`);
 				bot.login(config.botToken)
 					.then(() => {
