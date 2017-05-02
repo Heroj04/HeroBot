@@ -25,6 +25,7 @@ function command(obj) {
 
 bot.on(`ready`, () => {
 	bot.user.setGame(config.gameText);
+	console.log(`[INFO] Running module startup functions ...`);
 	modules.forEach(mod => {
 		if (typeof mod.startup === `function`) {
 			try {
