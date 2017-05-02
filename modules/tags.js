@@ -90,7 +90,28 @@ module.exports = {
 			usage: `RemoveTag <tagName>`,
 			help: `Deletes a saved tag.`,
 			func: (args) => {
-				args.msg.channel.send(`tagstuff`);
+				if (args.args.length > 0) {
+					let found = false;
+					for (var i = 0; i < tags[args.msg.guild.id].length; i++) {
+						if (args.args[0].toLowerCase === tags[args.msg.guild.id][i].name) {
+							try {
+								tags[args.msg.guild.id].splice(i, 1);
+								fs.writeFileSync(JSON.stringify(tags[args.msg.guild.id]));
+								args.msg.channel.send(`Tag Removed`);
+							} catch (e) {
+								console.error(`[ERROR] Issue saving tags for server ID ${args.msg.guild.id}: ${e}`);
+								args.msg.channel.send(`Error saving tags for this server`);
+							}
+							found = true;
+							break;
+						}
+					}
+					if (!found) {
+						args.msg.channel.send(`Sorry, that tagname doesn't seem to exist on this server.`);
+					}
+				} else {
+					args.msg.channel.send(`Incorrect syntax refer to 'help removetag' for more info`);
+				}
 			},
 		},
 		{
