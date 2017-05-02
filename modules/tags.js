@@ -16,16 +16,15 @@ module.exports = {
 			}
 			let guilds = args.bot.guilds.array();
 			for (var i = 0; i < guilds.length; i++) {
-				let stats;
 				try {
-					stats = fs.statSync(`${args.library}/${guilds[i].id}.json`);
+					let stats = fs.statSync(`${args.library}/${guilds[i].id}.json`);
 					if (stats.isFile()) {
-						tags[guilds.id] = JSON.parse(fs.readFileSync(`${args.library}/${guilds[i].id}.json`));
+						tags[guilds[i].id] = JSON.parse(fs.readFileSync(`${args.library}/${guilds[i].id}.json`));
 					}
 				} catch (e) {
 					if (e.code === `ENOENT`) {
 						fs.writeFileSync(`${args.library}/${guilds[i].id}.json`, `[]`);
-						tags[guilds.id] = [];
+						tags[guilds[i].id] = [];
 					}
 				}
 			}
@@ -42,13 +41,13 @@ module.exports = {
 					try {
 						let found;
 						for (var i = 0; i < tags[args.msg.guild.id].length; i++) {
-							if (args.args[1].toLowerCase() === tags[args.msg.guild.id][i].name) {
+							if (args.args[0].toLowerCase() === tags[args.msg.guild.id][i].name) {
 								found = tags[args.msg.guild.id][i];
 								break;
 							}
 						}
 						if (found) {
-							args.msg.edit(found.content);
+							args.msg.channel.send(found.content);
 						} else {
 							args.msg.channel.send(`Sorry, that tag doesn't seem to exist.`);
 						}
@@ -93,10 +92,10 @@ module.exports = {
 				if (args.args.length > 0) {
 					let found = false;
 					for (var i = 0; i < tags[args.msg.guild.id].length; i++) {
-						if (args.args[0].toLowerCase === tags[args.msg.guild.id][i].name) {
+						if (args.args[0].toLowerCase() === tags[args.msg.guild.id][i].name) {
 							try {
 								tags[args.msg.guild.id].splice(i, 1);
-								fs.writeFileSync(JSON.stringify(tags[args.msg.guild.id]));
+								fs.writeFileSync(`${args.library}/${args.msg.guild.id}.json`, JSON.stringify(tags[args.msg.guild.id]));
 								args.msg.channel.send(`Tag Removed`);
 							} catch (e) {
 								console.error(`[ERROR] Issue saving tags for server ID ${args.msg.guild.id}: ${e}`);
@@ -123,7 +122,7 @@ module.exports = {
 				if (args.args.length > 1) {
 					let found;
 					for (var i = 0; i < tags[args.msg.guild.id].length; i++) {
-						if (args.args[0].toLowerCase === tags[args.msg.guild.id][i].name) {
+						if (args.args[0].toLowerCase() === tags[args.msg.guild.id][i].name) {
 							found = tags[args.msg.guild.id][i].name;
 							break;
 						}
@@ -132,13 +131,11 @@ module.exports = {
 						args.msg.channel.send(`That tagname is already in use on this server.`);
 					} else {
 						try {
-							let cont = args.args;
-							cont.splice(0, 1);
 							tags[args.msg.guild.id].push({
 								name: args.args[0].toLowerCase(),
-								content: cont.join(` `),
+								content: args.args.splice(1, args.args.length - 1).join(` `),
 							});
-							fs.writeFileSync(JSON.stringify(tags[args.msg.guild.id]));
+							fs.writeFileSync(`${args.library}/${args.msg.guild.id}.json`, JSON.stringify(tags[args.msg.guild.id]));
 							args.msg.channel.send(`Tag Created`);
 						} catch (e) {
 							console.error(`[ERROR] Issue saving tags for server ID ${args.msg.guild.id}: ${e}`);
