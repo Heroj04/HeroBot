@@ -48,7 +48,7 @@ bot.on(`message`, (msg) => {
 		return;
 	}
 
-	if (msg.channel.type === `text`) {
+	if (msg.content[2] === `!`) {
 		let cont = msg.content.substring(0, 2) + msg.content.substring(3, msg.content.length - 3);
 		if (!cont.startsWith(`<@${bot.user.id}>`)) {
 			return;
