@@ -38,22 +38,26 @@ module.exports = {
 			usage: `Tag <tagName>`,
 			help: `Displays a saved tag.`,
 			func: (args) => {
-				try {
-					let found;
-					for (var i = 0; i < tags[args.msg.guild.id].length; i++) {
-						if (args.args[1].toLowerCase() === tags[args.msg.guild.id][i].name) {
-							found = tags[args.msg.guild.id][i];
-							break;
+				if (args.args.length > 0) {
+					try {
+						let found;
+						for (var i = 0; i < tags[args.msg.guild.id].length; i++) {
+							if (args.args[1].toLowerCase() === tags[args.msg.guild.id][i].name) {
+								found = tags[args.msg.guild.id][i];
+								break;
+							}
 						}
+						if (found) {
+							args.msg.edit(found.content);
+						} else {
+							args.msg.channel.send(`Sorry, that tag doesn't seem to exist.`);
+						}
+					} catch (e) {
+						console.error(`[ERROR] Issue retrieving tags for server ID ${args.msg.guild.id}: ${e}`);
+						args.msg.channel.send(`Error retrieving tags for this server.`);
 					}
-					if (found) {
-						args.msg.edit(found.content);
-					} else {
-						args.msg.channel.send(`Sorry, that tag doesn't seem to exist.`);
-					}
-				} catch (e) {
-					console.error(`[ERROR] Issue retrieving tags for server ID ${args.msg.guild.id}: ${e}`);
-					args.msg.channel.send(`Error retrieving tags for this server.`);
+				} else {
+					args.msg.channel.send(`Incorrect syntax refer to 'help tag' for more info`);
 				}
 			},
 		},
