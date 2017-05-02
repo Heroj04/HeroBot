@@ -22,7 +22,7 @@ module.exports = {
 					}
 				} catch (e) {
 					if (e.code === `ENOENT`) {
-						fs.writeFileSync(`${args.library}/g${guilds[i].id}.json`, `[]`);
+						fs.writeFileSync(`${args.library}/${guilds[i].id}.json`, `[]`);
 					}
 				}
 			}
