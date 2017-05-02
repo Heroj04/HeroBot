@@ -1,5 +1,5 @@
 module.exports = {
-	moduleOption: {
+	moduleOptions: {
 		name: `General`,
 		description: `A module featuring basic bot commands`,
 		author: `Heroj04`,
@@ -15,7 +15,7 @@ module.exports = {
 			func: (args) => {
 				let compMsg = `--- Available Commands ---`;
 				args.modules.forEach(module => {
-					compMsg += `\n\n~${module.name}~\n${module.description}`;
+					compMsg += `\n\n~${module.moduleOptions.name}~\n${module.moduleOptions.description}`;
 					module.commands.forEach(command => {
 						compMsg += `\n - ${command.name}`;
 					});

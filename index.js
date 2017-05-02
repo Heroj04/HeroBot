@@ -5,7 +5,7 @@ var config;
 
 var bot = new Discord.Client();
 
-var modules = {};
+var modules = [];
 
 // Command object class
 /*
@@ -39,50 +39,51 @@ bot.on(`message`, (msg) => {
 	console.log(`[COMMAND] (${new Date().getHours()}: ${new Date().getMinutes()}) ${msg.author.username}#${msg.author.discriminator}: ${msg.content}`);
 	// Check messages recieved for commands
 
-	for (var mod in modules) {
-		let found = false;
-		if (modules.hasOwnProperty(mod)) {
-			for (var i = 0; i < mod.commands.length; i++) {
-				if (cmdString === mod.commands[i].name || mod.commands[i].aliases.indexOf(cmdString) >= 0) {
-					found = mod.commands[i];
-					break;
-				}
-			}
-			if (found) {
+	let found = false;
+	let modName = ``;
+	for (var i = 0; i < modules.length; i++) {
+		console.log(i);
+		for (var j = 0; i < modules[i].commands.length; j++) {
+			if (cmdString === modules[i].commands[j].name || modules[i].commands[j].aliases.indexOf(cmdString) >= 0) {
+				found = modules[i].commands[j];
+				modName = modules[i].moduleOptions.name;
 				break;
 			}
 		}
 		if (found) {
-			if (!found.owner || config.ownerID.indexOf(msg.auther.id) >= 0) {
-				if (msg.channel.type === `text` || (msg.channel.type !== `text` && found.dm)) {
-					found.func({
-						msg: msg,
-						bot: bot,
-						library: `./library/${mod.name.toLowerCase().replace(/\s+/g, '')}`,
-						modules: modules,
-						args: split,
-					});
-				} else {
-					msg.channel.send(`Sorry that command cannot be used in this channel`)
-						.then(m => {
-							m.delete(10000);
-						});
-					msg.delete(10000);
-				}
+			break;
+		}
+	}
+	if (found) {
+		if (!found.owner || config.ownerID.indexOf(msg.author.id) >= 0) {
+			if (msg.channel.type === `text` || (msg.channel.type !== `text` && found.dm)) {
+				found.func({
+					msg: msg,
+					bot: bot,
+					library: `./library/${modName.toLowerCase().replace(/\s+/g, '')}`,
+					modules: modules,
+					args: split,
+				});
 			} else {
-				msg.channel.send(`You do not have permission for that command.`)
+				msg.channel.send(`Sorry that command cannot be used in this channel`)
 					.then(m => {
 						m.delete(10000);
 					});
 				msg.delete(10000);
 			}
 		} else {
-			msg.channel.send(`That command does not exist.`)
+			msg.channel.send(`You do not have permission for that command.`)
 				.then(m => {
 					m.delete(10000);
 				});
 			msg.delete(10000);
 		}
+	} else {
+		msg.channel.send(`That command does not exist.`)
+			.then(m => {
+				m.delete(10000);
+			});
+		msg.delete(10000);
 	}
 });
 
@@ -93,8 +94,8 @@ function loadModules(files) {
 
 		if (stats.isFile()) {
 			try {
-				modules[file.substring(0, file.indexOf(`.js`))] = require(`./modules/${file}`);
-				modules[file.substring(0, file.indexOf(`.js`))].commands.forEach(command => {
+				modules.push(require(`./modules/${file}`));
+				modules[modules.length - 1].commands.forEach(command => {
 					command.aliases = command.aliases === undefined ? [] : command.aliases;
 					command.help = command.help === undefined ? `No help info was provided for this command` : command.help;
 					command.usage = command.usage === undefined ? `No usage info was provided with this command` : command.usage;
