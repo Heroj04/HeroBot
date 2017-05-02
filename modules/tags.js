@@ -22,7 +22,7 @@ module.exports = {
 					}
 				} catch (e) {
 					if (e.code === `ENOENT`) {
-						fs.writeFileSync(`${args.library}/g${guilds[i].id}.json`, `{}`);
+						fs.writeFileSync(`${args.library}/g${guilds[i].id}.json`, `[]`);
 					}
 				}
 			}
@@ -43,7 +43,23 @@ module.exports = {
 			aliases: [`tags`, `displaytags`, `showtags`],
 			help: `Displays a list of saved tags.`,
 			func: (args) => {
-				args.msg.channel.send(`tagstuff`);
+				let compMsg;
+				try {
+					let tags = JSON.parse(fs.readFileSync(`${args.library}/${args.msg.guild.id}.json`));
+					if (tags.length > 0) {
+						compMsg = `Tags for ${args.msg.guild.name}`;
+						for (var i = 0; i < tags.length; i++) {
+							compMsg += `\n - ${tags[i].name}`;
+						}
+					} else {
+						compMsg = `There are no tags saved on ${args.msg.guild.name}`;
+					}
+				} catch (e) {
+					console.error(`[ERROR] Issue reading tags for server ID ${args.msg.guild.id}: ${e}`);
+					compMsg = `Error retrieving tags for this server`;
+				} finally {
+					args.msg.author.send(compMsg);
+				}
 			},
 		},
 		{
