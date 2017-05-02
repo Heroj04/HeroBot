@@ -24,7 +24,7 @@ function command(obj) {
 */
 
 bot.on(`ready`, () => {
-	bot.user.setGame(`@Radio Help`);
+	bot.user.setGame(config.gameText);
 });
 
 bot.on(`message`, (msg) => {
