@@ -12,6 +12,12 @@ module.exports = {
 			if (err) {
 				throw err;
 			}
+			args.bot.guilds.array.forEach(guild => {
+				let stats = fs.statSync(`${args.library}/g${guild.id}.json`);
+				if (stats === undefined) {
+					fs.writeFileSync(`${args.library}/g${guild.id}.json`, `{}`);
+				}
+			});
 		});
 	},
 	commands: [
