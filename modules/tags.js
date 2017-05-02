@@ -16,7 +16,7 @@ module.exports = {
 			for (var i = 0; i < guilds.length; i++) {
 				let stats;
 				try {
-					stats = fs.statSync(`${args.library}/g${guilds[i].id}.json`);
+					stats = fs.statSync(`${args.library}/${guilds[i].id}.json`);
 					if (!stats.isFile()) {
 						throw new Error(`Not a file`);
 					}
@@ -33,7 +33,6 @@ module.exports = {
 			name: `addtag`,
 			aliases: [`newtag`, `tagthis`, `tagas`],
 			help: `Creates a new tag.`,
-			dm: true,
 			func: (args) => {
 				args.msg.channel.send(`tagstuff`);
 			},
