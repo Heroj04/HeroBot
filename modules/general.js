@@ -13,13 +13,44 @@ module.exports = {
 			usage: 'Help [command or module]',
 			dm: true,
 			func: (args) => {
-				let compMsg = `--- Available Commands ---`;
-				args.modules.forEach(module => {
-					compMsg += `\n\n~${module.moduleOptions.name}~\n${module.moduleOptions.description}`;
-					module.commands.forEach(command => {
-						compMsg += `\n - ${command.name}`;
+				let compMsg;
+				if (args.args.length > 0) {
+					let cmdString = args.args[0].toLowerCase();
+					let found = false;
+					let modName = ``;
+					for (var i = 0; i < args.modules.length; i++) {
+						for (var j = 0; j < args.modules[i].commands.length; j++) {
+							if (cmdString === args.modules[i].commands[j].name || args.modules[i].commands[j].aliases.indexOf(cmdString) >= 0) {
+								found = args.modules[i].commands[j];
+								modName = args.modules[i].moduleOptions.name;
+								break;
+							}
+						}
+						if (found) {
+							break;
+						}
+					}
+					if (found) {
+						compMsg = `--- ${found.name} Help ---`;
+						compMsg += `\n~${modName}~`;
+						compMsg += `\nAliases: `;
+						found.aliases.forEach(alias => {
+							compMsg += `${alias} `;
+						});
+						compMsg += `\nUsage: ${found.usage}`;
+						compMsg += `\n\n${found.help}`;
+					} else {
+						compMsg = `Sorry, that command doesn't seem to exist`;
+					}
+				} else {
+					compMsg = `--- Available Commands ---`;
+					args.modules.forEach(module => {
+						compMsg += `\n\n~${module.moduleOptions.name}~\n${module.moduleOptions.description}`;
+						module.commands.forEach(command => {
+							compMsg += `\n - ${command.name}`;
+						});
 					});
-				});
+				}
 				args.msg.author.send(compMsg);
 			},
 		},
