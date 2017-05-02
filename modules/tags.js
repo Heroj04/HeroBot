@@ -95,7 +95,34 @@ module.exports = {
 			usage: `AddTag <tagName> <tagString>`,
 			help: `Creates a new tag.`,
 			func: (args) => {
-				args.msg.channel.send(`tagstuff`);
+				if (args.args.length > 1) {
+					let found;
+					for (var i = 0; i < tags[args.msg.guild.id].length; i++) {
+						if (args.args[0].toLowerCase === tags[args.msg.guild.id][i].name) {
+							found = tags[args.msg.guild.id][i].name;
+							break;
+						}
+					}
+					if (found) {
+						args.msg.channel.send(`That tagname is already in use on this server.`);
+					} else {
+						try {
+							let cont = args.args;
+							cont.splice(0, 1);
+							tags[args.msg.guild.id].push({
+								name: args.args[0].toLowerCase(),
+								content: cont.join(` `),
+							});
+							fs.writeFileSync(JSON.stringify(tags[args.msg.guild.id]));
+							args.msg.channel.send(`Tag Created`);
+						} catch (e) {
+							console.error(`[ERROR] Issue saving tags for server ID ${args.msg.guild.id}: ${e}`);
+							args.msg.channel.send(`Error saving tags for this server`);
+						}
+					}
+				} else {
+					args.msg.channel.send(`Incorrect syntax refer to 'help addtag' for more info`);
+				}
 			},
 		},
 	],
