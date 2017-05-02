@@ -48,11 +48,14 @@ bot.on(`message`, (msg) => {
 		return;
 	}
 
+	let cont;
 	if (msg.content[2] === `!`) {
-		let cont = msg.content.substring(0, 2) + msg.content.substring(3, msg.content.length - 3);
-		if (!cont.startsWith(`<@${bot.user.id}>`)) {
-			return;
-		}
+		cont = msg.content.substring(0, 2) + msg.content.substring(3, msg.content.length - 3);
+	} else {
+		cont = msg.content;
+	}
+	if (!cont.startsWith(`<@${bot.user.id}>`)) {
+		return;
 	}
 
 	let split = msg.content.toLowerCase()
