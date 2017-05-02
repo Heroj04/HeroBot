@@ -12,12 +12,20 @@ module.exports = {
 			if (err) {
 				throw err;
 			}
-			args.bot.guilds.array.forEach(guild => {
-				let stats = fs.statSync(`${args.library}/g${guild.id}.json`);
-				if (stats === undefined) {
-					fs.writeFileSync(`${args.library}/g${guild.id}.json`, `{}`);
+			let guilds = args.bot.guilds.array();
+			for (var i = 0; i < guilds.length; i++) {
+				let stats;
+				try {
+					stats = fs.statSync(`${args.library}/g${guilds[i].id}.json`);
+					if (!stats.isFile()) {
+						throw new Error(`Not a file`);
+					}
+				} catch (e) {
+					if (e.code === `ENOENT`) {
+						fs.writeFileSync(`${args.library}/g${guilds[i].id}.json`, `{}`);
+					}
 				}
-			});
+			}
 		});
 	},
 	commands: [
