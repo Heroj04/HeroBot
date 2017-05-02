@@ -30,8 +30,35 @@ module.exports = {
 	},
 	commands: [
 		{
+			name: `tag`,
+			aliases: [],
+			usage: `Tag <tagName>`,
+			help: `Displays a saved tag.`,
+			func: (args) => {
+				args.msg.channel.send(`tagstuff`);
+			},
+		},
+		{
+			name: `taglist`,
+			aliases: [`tags`, `displaytags`, `showtags`],
+			help: `Displays a list of saved tags.`,
+			func: (args) => {
+				args.msg.channel.send(`tagstuff`);
+			},
+		},
+		{
+			name: `removetag`,
+			aliases: [`deletetag`, `destroytag`, `-tag`],
+			usage: `RemoveTag <tagName>`,
+			help: `Deletes a saved tag.`,
+			func: (args) => {
+				args.msg.channel.send(`tagstuff`);
+			},
+		},
+		{
 			name: `addtag`,
-			aliases: [`newtag`, `tagthis`, `tagas`],
+			aliases: [`newtag`, `tagthis`, `tagas`, `+tag`],
+			usage: `AddTag <tagName> <tagString>`,
 			help: `Creates a new tag.`,
 			func: (args) => {
 				args.msg.channel.send(`tagstuff`);
