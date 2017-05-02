@@ -25,6 +25,7 @@ function command(obj) {
 
 bot.on(`ready`, () => {
 	bot.user.setGame(config.gameText);
+	console.log(`[INFO] Running module startup functions ...`);
 	modules.forEach(mod => {
 		if (typeof mod.startup === `function`) {
 			try {
@@ -58,7 +59,6 @@ bot.on(`message`, (msg) => {
 		.split(` `);
 	let cmdString = split[1];
 	split.splice(0, 2);
-	console.log(`[COMMAND] (${new Date().getHours()}: ${new Date().getMinutes()}) ${msg.author.tag}: ${msg.cleanContent}`);
 	// Check messages recieved for commands
 
 	let found = false;
@@ -75,6 +75,7 @@ bot.on(`message`, (msg) => {
 			break;
 		}
 	}
+	let reason;
 	if (found) {
 		if (!found.owner || config.ownerID.indexOf(msg.author.id) >= 0) {
 			if (msg.channel.type === `text` || (msg.channel.type !== `text` && found.dm)) {
@@ -91,6 +92,7 @@ bot.on(`message`, (msg) => {
 						m.delete(10000);
 					});
 				msg.delete(10000);
+				reason = `Channel`;
 			}
 		} else {
 			msg.channel.send(`You do not have permission for that command.`)
@@ -98,6 +100,7 @@ bot.on(`message`, (msg) => {
 					m.delete(10000);
 				});
 			msg.delete(10000);
+			reason = `Permission`;
 		}
 	} else {
 		msg.channel.send(`That command does not exist.`)
@@ -105,6 +108,12 @@ bot.on(`message`, (msg) => {
 				m.delete(10000);
 			});
 		msg.delete(10000);
+		reason = `Exist`;
+	}
+	if (reason) {
+		console.log(`[COMMAND] [Failed: ${reason}] (${new Date().getHours()}: ${new Date().getMinutes()}) ${msg.author.tag}: ${msg.cleanContent}`);
+	} else {
+		console.log(`[COMMAND] [Success] (${new Date().getHours()}: ${new Date().getMinutes()}) ${msg.author.tag}: ${msg.cleanContent}`);
 	}
 });
 
