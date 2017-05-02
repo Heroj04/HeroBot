@@ -42,9 +42,7 @@ bot.on(`message`, (msg) => {
 	let found = false;
 	let modName = ``;
 	for (var i = 0; i < modules.length; i++) {
-		console.log(i);
 		for (var j = 0; j < modules[i].commands.length; j++) {
-			console.log(j);
 			if (cmdString === modules[i].commands[j].name || modules[i].commands[j].aliases.indexOf(cmdString) >= 0) {
 				found = modules[i].commands[j];
 				modName = modules[i].moduleOptions.name;
@@ -159,7 +157,6 @@ function initialise() {
 
 			let modTotal = loadModules(modFiles);
 			console.log(`[INFO] Loaded [${modTotal}/${modFiles.length}] modules.`);
-			console.log(modules);
 			if (modTotal > 0) {
 				console.log(`[INFO] Logging in ...`);
 				bot.login(config.botToken)
