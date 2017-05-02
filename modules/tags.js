@@ -35,7 +35,24 @@ module.exports = {
 			usage: `Tag <tagName>`,
 			help: `Displays a saved tag.`,
 			func: (args) => {
-				args.msg.channel.send(`tagstuff`);
+				try {
+					let tags = JSON.parse(fs.readFileSync(`${args.library}/${args.msg.guild.id}.json`));
+					let found;
+					for (var i = 0; i < tags.length; i++) {
+						if (args.args[1].toLowerCase() === tags[i].name) {
+							found = tags[i];
+							break;
+						}
+					}
+					if (found) {
+						args.msg.edit(found.content);
+					} else {
+						args.msg.channel.send(`Sorry, that tag doesn't seem to exist.`);
+					}
+				} catch (e) {
+					console.error(`[ERROR] Issue retrieving tags for server ID ${args.msg.guild.id}: ${e}`);
+					args.msg.channel.send(`Error retrieving tags for this server.`);
+				}
 			},
 		},
 		{
@@ -55,7 +72,7 @@ module.exports = {
 						compMsg = `There are no tags saved on ${args.msg.guild.name}`;
 					}
 				} catch (e) {
-					console.error(`[ERROR] Issue reading tags for server ID ${args.msg.guild.id}: ${e}`);
+					console.error(`[ERROR] Issue retrieving tags for server ID ${args.msg.guild.id}: ${e}`);
 					compMsg = `Error retrieving tags for this server`;
 				} finally {
 					args.msg.author.send(compMsg);
