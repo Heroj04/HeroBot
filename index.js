@@ -165,6 +165,15 @@ function initialise() {
 			let modTotal = loadModules(modFiles);
 			console.log(`[INFO] Loaded [${modTotal}/${modFiles.length}] modules.`);
 			if (modTotal > 0) {
+				modules.forEach(mod => {
+					if (typeof mod.startup === `function`) {
+						mod.startup({
+							bot: bot,
+							library: `./library/${mod.moduleOptions.name.toLowerCase().replace(/\s+/g, '')}`,
+							modules: modules,
+						});
+					}
+				});
 				console.log(`[INFO] Logging in ...`);
 				bot.login(config.botToken)
 					.then(() => {
