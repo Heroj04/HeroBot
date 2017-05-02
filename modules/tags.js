@@ -1,5 +1,7 @@
 const fs = require(`fs`);
 
+var tags = {};
+
 module.exports = {
 	moduleOptions: {
 		name: `Tagging`,
@@ -17,12 +19,13 @@ module.exports = {
 				let stats;
 				try {
 					stats = fs.statSync(`${args.library}/${guilds[i].id}.json`);
-					if (!stats.isFile()) {
-						throw new Error(`Not a file`);
+					if (stats.isFile()) {
+						tags[guilds.id] = JSON.parse(fs.readFileSync(`${args.library}/${guilds[i].id}.json`));
 					}
 				} catch (e) {
 					if (e.code === `ENOENT`) {
 						fs.writeFileSync(`${args.library}/${guilds[i].id}.json`, `[]`);
+						tags[guilds.id] = [];
 					}
 				}
 			}
@@ -36,11 +39,10 @@ module.exports = {
 			help: `Displays a saved tag.`,
 			func: (args) => {
 				try {
-					let tags = JSON.parse(fs.readFileSync(`${args.library}/${args.msg.guild.id}.json`));
 					let found;
-					for (var i = 0; i < tags.length; i++) {
-						if (args.args[1].toLowerCase() === tags[i].name) {
-							found = tags[i];
+					for (var i = 0; i < tags[args.msg.guild.id].length; i++) {
+						if (args.args[1].toLowerCase() === tags[args.msg.guild.id][i].name) {
+							found = tags[args.msg.guild.id][i];
 							break;
 						}
 					}
@@ -62,11 +64,10 @@ module.exports = {
 			func: (args) => {
 				let compMsg;
 				try {
-					let tags = JSON.parse(fs.readFileSync(`${args.library}/${args.msg.guild.id}.json`));
-					if (tags.length > 0) {
+					if (tags[args.msg.guild.id].length > 0) {
 						compMsg = `Tags for ${args.msg.guild.name}`;
-						for (var i = 0; i < tags.length; i++) {
-							compMsg += `\n - ${tags[i].name}`;
+						for (var i = 0; i < tags[args.msg.guild.id].length; i++) {
+							compMsg += `\n - ${tags[args.msg.guild.id][i].name}`;
 						}
 					} else {
 						compMsg = `There are no tags saved on ${args.msg.guild.name}`;
