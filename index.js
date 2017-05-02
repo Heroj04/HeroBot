@@ -104,7 +104,7 @@ function loadModules(files) {
 				modules[modules.length - 1].commands.forEach(command => {
 					command.aliases = command.aliases === undefined ? [] : command.aliases;
 					command.help = command.help === undefined ? `No help info was provided for this command` : command.help;
-					command.usage = command.usage === undefined ? `No usage info was provided with this command` : command.usage;
+					command.usage = command.usage === undefined ? `No usage info was provided with this command, it is likely just a command which takes no arguments` : command.usage;
 					command.dm = command.dm === undefined ? false : command.dm;
 					command.owner = command.owner === undefined ? false : command.owner;
 				});
