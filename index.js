@@ -25,7 +25,7 @@ function command(obj) {
 
 bot.on(`ready`, () => {
 	bot.user.setGame(config.gameText);
-	console.log(`[INFO] Running module startup functions ...`);
+	console.log(`\x1b[33m[INFO] Running module startup functions ...\x1b[0m`);
 	modules.forEach(mod => {
 		if (typeof mod.startup === `function`) {
 			try {
@@ -36,7 +36,7 @@ bot.on(`ready`, () => {
 				});
 			} catch (e) {
 				console.error(`[ERROR] ${mod.moduleOptions.name} module encountered an error in startup function: ${e}`);
-				console.log(`[INFO] Disabling ${mod.moduleOptions.name} module`);
+				console.log(`\x1b[33m[INFO] Disabling ${mod.moduleOptions.name} module\x1b[0m`);
 				delete modules[modules.indexOf(mod)];
 			}
 		}
@@ -142,7 +142,7 @@ function loadModules(files) {
 						throw error;
 					}
 				}
-				console.log(`[INFO] Loaded module ${file}`);
+				console.log(`\x1b[33m[INFO] Loaded module ${file}\x1b[0m`);
 				modTotal++;
 			} catch (e) {
 				console.log(`\x1b[31m[ERROR] Could not load module ${file}: ${e.message}\x1b[0m`);
@@ -155,13 +155,13 @@ function loadModules(files) {
 function initialise() {
 	// Do things to set up the bot
 
-	console.log(`[INFO] Starting Bot ...`);
+	console.log(`\x1b[33m[INFO] Starting Bot ...\x1b[0m`);
 	fs.readdir(`./`, (err, files) => {
 		if (err) {
 			return console.error(err);
 		}
 		if (files === undefined || files.length < 1) {
-			return console.error(`[ERROR] No files are available including this one. (This error shouldn't appear but if it does you've done something wrong)`);
+			return console.error(`\x1b[31m[ERROR] No files are available including this one. (This error shouldn't appear but if it does you've done something wrong)\x1b[0m`);
 		}
 		let mods = false,
 			lib = false,
@@ -177,32 +177,32 @@ function initialise() {
 			}
 		}
 		if (!mods) {
-			console.log(`[INFO] Modules folder not found, creating one now.`);
+			console.log(`\x1b[33m[INFO] Modules folder not found, creating one now.\x1b[0m`);
 			fs.mkdirSync(`modules`);
 		}
 		if (!lib) {
-			console.log(`[INFO] Library folder not found, creating one now.`);
+			console.log(`\x1b[33m[INFO] Library folder not found, creating one now.\x1b[0m`);
 			fs.mkdirSync(`library`);
 		}
 		if (!conf) {
-			console.log(`[INFO] Config file not found, creating one now.`);
+			console.log(`\x1b[33m[INFO] Config file not found, creating one now.\x1b[0m`);
 			fs.writeFileSync(`./config.js`, fs.readFileSync(`./example_config.js`));
 		}
-		console.log(`[INFO] Loading config file ...`);
+		console.log(`\x1b[33m[INFO] Loading config file ...\x1b[0m`);
 		config = require(`./config.js`);
-		console.log(`[INFO] Loading Modules ...`);
+		console.log(`\x1b[33m[INFO] Loading Modules ...\x1b[0m`);
 		fs.readdir(`modules`, (e, modFiles) => {
 			if (e) {
 				throw e;
 			}
 
 			let modTotal = loadModules(modFiles);
-			console.log(`[INFO] Loaded [${modTotal}/${modFiles.length}] modules.`);
+			console.log(`\x1b[33m[INFO] Loaded [${modTotal}/${modFiles.length}] modules.\x1b[0m`);
 			if (modTotal > 0) {
-				console.log(`[INFO] Logging in ...`);
+				console.log(`\x1b[33m[INFO] Logging in ...\x1b[0m`);
 				bot.login(config.botToken)
 					.then(() => {
-						console.log(`[INFO] Bot successfully logged in.`);
+						console.log(`\x1b[33m[INFO] Bot successfully logged in.\x1b[0m`);
 					})
 					.catch(error => {
 						console.error(`\x1b[31m[ERROR] Issue Logging in: ${err}\x1b[0m`);
