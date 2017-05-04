@@ -73,7 +73,7 @@ module.exports = {
 			func: (args) => {
 				let script = args.args.join[` `];
 				try {
-					console.log(`[INFO] Eval command running script: ${script}`);
+					args.log(`Eval command running script: ${script}`, 30);
 					let complete = eval(script);
 					args.msg.channel.send(`Script completed, returned: ${complete}`);
 				} catch (e) {

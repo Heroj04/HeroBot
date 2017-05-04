@@ -23,20 +23,44 @@ function command(obj) {
 }
 */
 
+function log(message, level) {
+	level = typeof level === `undefined` ? 20 : level;
+	let debug = typeof config === `undefined` ? 0 : config.debugLevel;
+	if (level >= debug) {
+		switch (level) {
+			case 10:
+				console.log(`\x1b[0m[COMMAND] ${message}\x1b[0m`);
+				break;
+			case 20:
+				console.info(`\x1b[32m[INFO] ${message}\x1b[0m`);
+				break;
+			case 30:
+				console.warn(`\x1b[33m[WARNING] ${message}\x1b[0m`);
+				break;
+			case 40:
+				console.error(`\x1b[31m[ERROR] ${message}\x1b[0m`);
+				break;
+			default:
+				console.log(`\x1b[0m[?] ${message}\x1b[0m`);
+		}
+	}
+}
+
 bot.on(`ready`, () => {
 	bot.user.setGame(config.gameText);
-	console.log(`\x1b[33m[INFO] Running module startup functions ...\x1b[0m`);
+	log(`Running module startup functions ...`, 20);
 	modules.forEach(mod => {
 		if (typeof mod.startup === `function`) {
 			try {
 				mod.startup({
 					bot: bot,
 					library: `./library/${mod.moduleOptions.name.toLowerCase().replace(/\s+/g, '')}`,
+					log: log,
 					modules: modules,
 				});
 			} catch (e) {
-				console.error(`[ERROR] ${mod.moduleOptions.name} module encountered an error in startup function: ${e}`);
-				console.log(`\x1b[33m[INFO] Disabling ${mod.moduleOptions.name} module\x1b[0m`);
+				log(`${mod.moduleOptions.name} module encountered an error in startup function: ${e}`, 40);
+				log(`Disabling ${mod.moduleOptions.name} module`, 20);
 				delete modules[modules.indexOf(mod)];
 			}
 		}
@@ -87,6 +111,7 @@ bot.on(`message`, (msg) => {
 					bot: bot,
 					library: `./library/${modName.toLowerCase().replace(/\s+/g, '')}`,
 					modules: modules,
+					log: log,
 					args: split,
 				});
 			} else {
@@ -114,9 +139,9 @@ bot.on(`message`, (msg) => {
 		reason = `Exist`;
 	}
 	if (reason) {
-		console.log(`[COMMAND] [Failed: ${reason}] (${new Date().getHours()}: ${new Date().getMinutes()}) ${msg.author.tag}: ${msg.cleanContent}`);
+		log(`[Failed: ${reason}] (${new Date().getHours()}: ${new Date().getMinutes()}) ${msg.author.tag}: ${msg.cleanContent}`, 10);
 	} else {
-		console.log(`[COMMAND] [Success] (${new Date().getHours()}: ${new Date().getMinutes()}) ${msg.author.tag}: ${msg.cleanContent}`);
+		log(`[Success] (${new Date().getHours()}: ${new Date().getMinutes()}) ${msg.author.tag}: ${msg.cleanContent}`, 10);
 	}
 });
 
@@ -142,10 +167,10 @@ function loadModules(files) {
 						throw error;
 					}
 				}
-				console.log(`\x1b[33m[INFO] Loaded module ${file}\x1b[0m`);
+				log(`Loaded module ${file}`, 20);
 				modTotal++;
 			} catch (e) {
-				console.log(`\x1b[31m[ERROR] Could not load module ${file}: ${e.message}\x1b[0m`);
+				log(`Could not load module ${file}: ${e.message}`, 40);
 			}
 		}
 	});
@@ -155,13 +180,13 @@ function loadModules(files) {
 function initialise() {
 	// Do things to set up the bot
 
-	console.log(`\x1b[33m[INFO] Starting Bot ...\x1b[0m`);
+	log(`Starting Bot ...`, 20);
 	fs.readdir(`./`, (err, files) => {
 		if (err) {
-			return console.error(err);
+			return log(`Issue reading base folder: ${err}`, 40);
 		}
 		if (files === undefined || files.length < 1) {
-			return console.error(`\x1b[31m[ERROR] No files are available including this one. (This error shouldn't appear but if it does you've done something wrong)\x1b[0m`);
+			return log(`No files are available including this one. (This error shouldn't appear but if it does you've done something wrong)`, 40);
 		}
 		let mods = false,
 			lib = false,
@@ -177,38 +202,38 @@ function initialise() {
 			}
 		}
 		if (!mods) {
-			console.log(`\x1b[33m[INFO] Modules folder not found, creating one now.\x1b[0m`);
+			log(`Modules folder not found, creating one now.`, 30);
 			fs.mkdirSync(`modules`);
 		}
 		if (!lib) {
-			console.log(`\x1b[33m[INFO] Library folder not found, creating one now.\x1b[0m`);
+			log(`Library folder not found, creating one now.`, 20);
 			fs.mkdirSync(`library`);
 		}
 		if (!conf) {
-			console.log(`\x1b[33m[INFO] Config file not found, creating one now.\x1b[0m`);
+			log(`Config file not found, creating one now.`, 30);
 			fs.writeFileSync(`./config.js`, fs.readFileSync(`./example_config.js`));
 		}
-		console.log(`\x1b[33m[INFO] Loading config file ...\x1b[0m`);
+		log(`Loading config file ...`, 20);
 		config = require(`./config.js`);
-		console.log(`\x1b[33m[INFO] Loading Modules ...\x1b[0m`);
+		log(`Loading Modules ...`, 20);
 		fs.readdir(`modules`, (e, modFiles) => {
 			if (e) {
 				throw e;
 			}
 
 			let modTotal = loadModules(modFiles);
-			console.log(`\x1b[33m[INFO] Loaded [${modTotal}/${modFiles.length}] modules.\x1b[0m`);
+			log(`Loaded [${modTotal}/${modFiles.length}] modules.`, 20);
 			if (modTotal > 0) {
-				console.log(`\x1b[33m[INFO] Logging in ...\x1b[0m`);
+				log(`Logging in ...`, 20);
 				bot.login(config.botToken)
 					.then(() => {
-						console.log(`\x1b[33m[INFO] Bot successfully logged in.\x1b[0m`);
+						log(`Bot successfully logged in.`, 20);
 					})
 					.catch(error => {
-						console.error(`\x1b[31m[ERROR] Issue Logging in: ${err}\x1b[0m`);
+						log(`Issue Logging in: ${err}`, 40);
 					});
 			} else {
-				console.error(`\x1b[31m[ERROR] No modules were loaded\x1b[0m`);
+				log(`No modules were loaded.`, 40);
 			}
 		});
 	});

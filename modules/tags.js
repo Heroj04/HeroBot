@@ -52,7 +52,7 @@ module.exports = {
 							args.msg.channel.send(`Sorry, that tag doesn't seem to exist.`);
 						}
 					} catch (e) {
-						console.error(`[ERROR] Issue retrieving tags for server ID ${args.msg.guild.id}: ${e}`);
+						args.log(`Issue retrieving tags for server ID ${args.msg.guild.id}: ${e}`, 40);
 						args.msg.channel.send(`Error retrieving tags for this server.`);
 					}
 				} else {
@@ -76,7 +76,7 @@ module.exports = {
 						compMsg = `There are no tags saved on ${args.msg.guild.name}`;
 					}
 				} catch (e) {
-					console.error(`[ERROR] Issue retrieving tags for server ID ${args.msg.guild.id}: ${e}`);
+					args.log(`Issue retrieving tags for server ID ${args.msg.guild.id}: ${e}`, 40);
 					compMsg = `Error retrieving tags for this server`;
 				} finally {
 					args.msg.author.send(compMsg);
@@ -98,7 +98,7 @@ module.exports = {
 								fs.writeFileSync(`${args.library}/${args.msg.guild.id}.json`, JSON.stringify(tags[args.msg.guild.id]));
 								args.msg.channel.send(`Tag Removed`);
 							} catch (e) {
-								console.error(`[ERROR] Issue saving tags for server ID ${args.msg.guild.id}: ${e}`);
+								args.log(`Issue saving tags for server ID ${args.msg.guild.id}: ${e}`, 40);
 								args.msg.channel.send(`Error saving tags for this server`);
 							}
 							found = true;
@@ -138,7 +138,7 @@ module.exports = {
 							fs.writeFileSync(`${args.library}/${args.msg.guild.id}.json`, JSON.stringify(tags[args.msg.guild.id]));
 							args.msg.channel.send(`Tag Created`);
 						} catch (e) {
-							console.error(`[ERROR] Issue saving tags for server ID ${args.msg.guild.id}: ${e}`);
+							args.log(`Issue saving tags for server ID ${args.msg.guild.id}: ${e}`, 40);
 							args.msg.channel.send(`Error saving tags for this server`);
 						}
 					}
