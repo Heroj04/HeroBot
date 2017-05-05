@@ -54,11 +54,19 @@ module.exports = {
 						if (found) {
 							args.msg.channel.send(found.content);
 						} else {
-							args.msg.channel.send(`Sorry, that tag doesn't seem to exist.`);
+							args.msg.channel.send(`Sorry, that tag doesn't seem to exist.`)
+								.then(m => {
+									m.delete(10000);
+								});
+							args.msg.delete(10000);
 						}
 					} catch (e) {
 						args.log(`Issue retrieving tags for server ID ${args.msg.guild.id}: ${e}`, 40);
-						args.msg.channel.send(`Error retrieving tags for this server.`);
+						args.msg.channel.send(`Error retrieving tags for this server.`)
+							.then(m => {
+								m.delete(10000);
+							});
+						args.msg.delete(10000);
 					}
 				} else {
 					args.msg.channel.send(`Incorrect syntax refer to 'help tag' for more info`);
@@ -85,6 +93,7 @@ module.exports = {
 					compMsg = `Error retrieving tags for this server`;
 				} finally {
 					args.msg.author.send(compMsg);
+					args.msg.delete(5000);
 				}
 			},
 		},
@@ -101,17 +110,29 @@ module.exports = {
 							try {
 								tags[args.msg.guild.id].splice(i, 1);
 								fs.writeFileSync(`${args.library}/${args.msg.guild.id}.json`, JSON.stringify(tags[args.msg.guild.id]));
-								args.msg.channel.send(`Tag Removed`);
+								args.msg.channel.send(`Tag Removed`)
+									.then(m => {
+										m.delete(10000);
+									});
+								args.msg.delete(10000);
 							} catch (e) {
 								args.log(`Issue saving tags for server ID ${args.msg.guild.id}: ${e}`, 40);
-								args.msg.channel.send(`Error saving tags for this server`);
+								args.msg.channel.send(`Error saving tags for this server`)
+									.then(m => {
+										m.delete(10000);
+									});
+								args.msg.delete(10000);
 							}
 							found = true;
 							break;
 						}
 					}
 					if (!found) {
-						args.msg.channel.send(`Sorry, that tagname doesn't seem to exist on this server.`);
+						args.msg.channel.send(`Sorry, that tagname doesn't seem to exist on this server.`)
+							.then(m => {
+								m.delete(10000);
+							});
+						args.msg.delete(10000);
 					}
 				} else {
 					args.msg.channel.send(`Incorrect syntax refer to 'help removetag' for more info`);
@@ -133,7 +154,11 @@ module.exports = {
 						}
 					}
 					if (found) {
-						args.msg.channel.send(`That tagname is already in use on this server.`);
+						args.msg.channel.send(`That tagname is already in use on this server.`)
+							.then(m => {
+								m.delete(10000);
+							});
+						args.msg.delete(10000);
 					} else {
 						try {
 							tags[args.msg.guild.id].push({
@@ -141,10 +166,18 @@ module.exports = {
 								content: args.args.splice(1, args.args.length - 1).join(` `),
 							});
 							fs.writeFileSync(`${args.library}/${args.msg.guild.id}.json`, JSON.stringify(tags[args.msg.guild.id]));
-							args.msg.channel.send(`Tag Created`);
+							args.msg.channel.send(`Tag Created`)
+								.then(m => {
+									m.delete(10000);
+								});
+							args.msg.delete(10000);
 						} catch (e) {
 							args.log(`Issue saving tags for server ID ${args.msg.guild.id}: ${e}`, 40);
-							args.msg.channel.send(`Error saving tags for this server`);
+							args.msg.channel.send(`Error saving tags for this server`)
+								.then(m => {
+									m.delete(10000);
+								});
+							args.msg.delete(10000);
 						}
 					}
 				} else {

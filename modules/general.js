@@ -52,6 +52,7 @@ module.exports = {
 					});
 				}
 				args.msg.author.send(compMsg);
+				args.msg.delete(5000);
 			},
 		},
 		{
@@ -98,6 +99,7 @@ module.exports = {
 					compMsg += `\n${channel.name} ID: ${channel.id}`;
 				});
 				args.msg.author.send(compMsg);
+				args.msg.delete(5000);
 			},
 		},
 	],
