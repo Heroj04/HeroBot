@@ -46,6 +46,10 @@ function log(message, level) {
 	}
 }
 
+bot.on(`error`, e => {
+	log(`Bot Error: ${e}`, 40);
+});
+
 bot.on(`ready`, () => {
 	bot.user.setGame(config.gameText);
 	log(`Running module startup functions ...`, 20);
