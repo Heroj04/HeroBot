@@ -87,8 +87,8 @@ module.exports = {
 			help: `Lists the IDs of users and channels in this guild.`,
 			func: (args) => {
 				let compMsg = `Guild ID: ${args.msg.guild.id}`;
-				let textChannels = args.msg.guild.filter((channel, index, array) => channel.type === `text`);
-				let voiceChannels = args.msg.guild.filter((channel, index, array) => channel.type === `voice`);
+				let textChannels = args.msg.guild.channels.filter((channel, index, array) => channel.type === `text`);
+				let voiceChannels = args.msg.guild.channels.filter((channel, index, array) => channel.type === `voice`);
 				compMsg += `\n\n~Text Channels~`;
 				textChannels.forEach(channel => {
 					compMsg += `\n${channel.name} ID: ${channel.id}`;
@@ -97,7 +97,7 @@ module.exports = {
 				voiceChannels.forEach(channel => {
 					compMsg += `\n${channel.name} ID: ${channel.id}`;
 				});
-				args.author.send(compMsg);
+				args.msg.author.send(compMsg);
 			},
 		},
 	],
