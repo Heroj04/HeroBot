@@ -25,7 +25,7 @@ function command(obj) {
 
 function log(message, level) {
 	level = typeof level === `undefined` ? 20 : level;
-	let debug = typeof config === `undefined` ? 0 : config.debugLevel;
+	let debug = typeof config === `undefined` ? 0 : config.debugLevel === undefined ? 0 : config.debugLevel;
 	if (level >= debug) {
 		switch (level) {
 			case 10:
