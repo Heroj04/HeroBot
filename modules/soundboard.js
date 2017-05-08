@@ -3,6 +3,20 @@ const ytdl = require('ytdl-core');
 
 var queue = {};
 
+function next(bot, id) {
+	queue[id][0].member.voiceChannel.join()
+		.then(conn => {
+			conn.playFile(queue[id][0].sound)
+				.on(`end`, reason => {
+					queue[id].splice(0, 1);
+					if (queue[id].length > 0) {
+						return next(bot, id);
+					}
+					conn.disconnect();
+				});
+		});
+}
+
 module.exports = {
 	moduleOptions: {
 		name: `SoundBoard`,
@@ -68,10 +82,22 @@ module.exports = {
 			help: `Plays a sound bite in your channel`,
 			usage: `PlaySound <soundName>`,
 			func: args => {
-				if (args.args.length > 0) {
+				if (args.msg.member.voiceChannel === undefined) {
+					args.msg.channel.send(`You must be in a voice channel to use this command`);
+				} else if (args.args.length > 0) {
 					fs.readdir(args.library, (err, files) => {
 						if (err) {
 							args.log(`Issue reading soundboard library: ${err}`, 40);
+							args.msg.channel.send(`There was an error reading the soundboard library`);
+							return;
+						}
+						if (files.includes(args.args[0].toLowerCase())) {
+							queue[args.msg.guild.id].push({ member: args.msg.member, sound: `${args.library}/${args.args[0].toLowerCase()}` });
+							if (queue[args.msg.guild.id].length === 1) {
+								return next(args.bot, args.msg.guild.id);
+							}
+						} else {
+							args.msg.channel.send(`That sound clip does not exist`);
 						}
 					});
 				} else {
