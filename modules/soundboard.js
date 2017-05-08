@@ -35,13 +35,26 @@ module.exports = {
 							if (info.length_seconds > 30) {
 								return args.msg.channel.send(`Video too long to use on soundboard (Must be less than 30 seconds)`);
 							}
-							try {
-								ytdl.downloadFromInfo(info, { filter: `audioonly` })
-									.pipe(fs.createWriteStream(`${args.library}/${args.args[0].toLowerCase()}`));
-							} catch (error) {
+							let download = ytdl.downloadFromInfo(info, { filter: `audioonly` });
+							download.pipe(fs.createWriteStream(`${args.library}/${args.args[0].toLowerCase()}.temp`));
+							download.on(`end`, () => {
+								fs.rename(`${args.library}/${args.args[0].toLowerCase()}.temp`, `${args.library}/${args.args[0].toLowerCase()}`, error => {
+									if (error) {
+										args.log(`Issue saving file: ${error}`, 40);
+									} else {
+										args.msg.channel.send(`Soundclip added to library`);
+									}
+								});
+							});
+							download.on(`error`, error => {
+								fs.unlink(`${args.library}/${args.args[0].toLowerCase()}.temp`, ex => {
+									if (ex) {
+										args.log(`Issue deleting temp file: ${ex}`, 40);
+									}
+								});
 								args.log(`Issue downloading video: ${error}`, 40);
-								args.msg.channel.send(`There was an error downloading that video.`);
-							}
+								args.msg.channel.send(`There was an error downloading that clip`);
+							});
 						});
 					});
 				} else {
