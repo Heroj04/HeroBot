@@ -189,8 +189,8 @@ function initialise() {
 		if (err) {
 			return log(`Issue reading base folder: ${err}`, 40);
 		}
-		if (files === undefined || files.length < 1) {
-			return log(`No files are available including this one. (This error shouldn't appear but if it does you've done something wrong)`, 40);
+		if (files === undefined || files.length < 2) {
+			return log(`No files are available including this one. (This error shouldn't appear but if it does you've done something very wrong)`, 40);
 		}
 		let mods = false,
 			lib = false,
