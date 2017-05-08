@@ -1,6 +1,7 @@
 const fs = require(`fs`);
+const Cleverbot = require(`clever.io`);
 
-var key = ``;
+var clever;
 
 module.exports = {
 	moduleOptions: {
@@ -25,9 +26,10 @@ module.exports = {
 				}
 			}
 			let keyFile = JSON.parse(data);
-			key = keyFile.apiKey;
-			if (key === undefined || key === ``) {
-				args.log(`No Cleverbot API Key found`, 30);
+			if (keyFile.apiKey === undefined || keyFile.apiKey === `` || keyFile.apiUser === undefined || keyFile.apiUser === ``) {
+				args.log(`APIKey and/or APIUser not set, cleverbot commands will not work until these have been defined in ${args.library}/keys.json.`, 40);
+			} else {
+				clever = new Cleverbot(keyFile.apiUser, keyFile.apiKey);
 			}
 		});
 	},
@@ -39,7 +41,23 @@ module.exports = {
 			usage: `Chat <Message to bot>`,
 			dm: true,
 			func: args => {
-				args.msg.reply(`hey`);
+				if (clever === undefined) {
+					args.msg.channel.send(`There is no Cleverbot API key defined, tell the admin`);
+				} else if (args.args.length > 0) {
+					clever.ask(args.args.join(` `), (err, reply) => {
+						if (err) {
+							args.log(`Issue with cleverbot api call: ${err}`, 40);
+							args.msg.channel.send(`Error calling cleverbot API.`)
+								.then((m) => {
+									m.delete(10000);
+								});
+							args.msg.delete(10000);
+						}
+						args.msg.reply(reply);
+					});
+				} else {
+					args.msg.reply(`Don't be shy, say something.`);
+				}
 			},
 		},
 	],
