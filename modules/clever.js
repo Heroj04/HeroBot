@@ -27,7 +27,7 @@ module.exports = {
 			}
 			let keyFile = JSON.parse(data);
 			if (keyFile.apiKey === undefined || keyFile.apiKey === `` || keyFile.apiUser === undefined || keyFile.apiUser === ``) {
-				args.log(`APIKey and/or APIUser not set, cleverbot commands will not work until these have been defined in ${args.library}/keys.json.`, 40);
+				args.log(`APIKey and/or APIUser not set, cleverbot commands will not work until these have been defined in ${args.library}/key.json.`, 40);
 			} else {
 				clever = new Cleverbot(keyFile.apiUser, keyFile.apiKey);
 			}
