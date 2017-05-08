@@ -1,6 +1,8 @@
 const fs = require(`fs`);
 const ytdl = require('ytdl-core');
 
+var queue = {};
+
 module.exports = {
 	moduleOptions: {
 		name: `SoundBoard`,
@@ -44,6 +46,23 @@ module.exports = {
 					});
 				} else {
 					args.msg.channel.send(`Incorrect syntax, refer to 'help addsound' for more info.`);
+				}
+			},
+		},
+		{
+			name: `playsound`,
+			aliases: [`sound`, `play`, 'sb'],
+			help: `Plays a sound bite in your channel`,
+			usage: `PlaySound <soundName>`,
+			func: args => {
+				if (args.args.length > 0) {
+					fs.readdir(args.library, (err, files) => {
+						if (err) {
+							args.log(`Issue reading soundboard library: ${err}`, 40);
+						}
+					});
+				} else {
+					args.msg.channel.send(`Please specify a sound I should play.`);
 				}
 			},
 		},
