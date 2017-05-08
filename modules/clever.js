@@ -1,5 +1,5 @@
 const fs = require(`fs`);
-const Cleverbot = require(`clever.io`);
+const Cleverbot = require(`cleverbot.io`);
 
 var clever;
 
