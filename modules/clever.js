@@ -15,7 +15,7 @@ module.exports = {
 			if (err) {
 				if (err.code === `ENOENT`) {
 					args.log(`No key file present, creating one now. You will not have access to Cleverbot until this has been added.`, 30);
-					fs.writeFile(`${args.library}/key.json`, `{apiKey: \`\`}`, (e) => {
+					fs.writeFile(`${args.library}/key.json`, `{apiKey: '', apiUser: ''}`, (e) => {
 						if (e) {
 							return args.log(`Issue creating key file: ${e}`, 40);
 						}
