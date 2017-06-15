@@ -41,6 +41,33 @@ var commands = [
 			fullDescription: 'It literally just sends a message in the same channel which says "Pong!"',
 		},
 	},
+	{
+		name: 'Join',
+		return: (msg, args) => {
+			let message;
+			if (msg.member.voiceState.channelID !== undefined) {
+				bot.joinVoiceChannel(msg.member.voiceState.channelID)
+					.then(() => {
+						message = ':ok_hand:';
+					})
+					.catch(err => {
+						log(err, 40);
+						message = `[ERROR] There was an issue joining your channel:\n\`${err}\``;
+					});
+			} else {
+				message = '[ERROR]\n`You must be in a voice channel to use this command`';
+			}
+			return message;
+		},
+		options: {
+			aliases: ['Voice', 'Channel', 'Connect'],
+			description: 'Join a voice channel',
+			fullDescription: 'Make the bot connect to the same voice channel as the user who invoked this command',
+			requirements: {
+				roleNames: ['radiobot-dj'],
+			},
+		},
+	},
 ];
 
 function initialise() {
@@ -75,7 +102,7 @@ function initialise() {
 			},
 			{
 				// Command Options
-				description: 'A bot to make sound and text tags',
+				description: 'A bot to play internet streams',
 				owner: '@Heroj04',
 				defaultCommandOptions: {
 					caseInsensitive: true,
@@ -83,7 +110,7 @@ function initialise() {
 					guildOnly: true,
 					cooldownMessage: 'You\'re using this command faster than I can cool down.',
 					permissionMessage: 'You don\'t have permissions for that command. Make sure you are in a role with the name "radiobot-dj".',
-					errorMessage: '[ERROR] Something went wrong processing that command, try again later and if errors persist contact your administrator.',
+					errorMessage: '[ERROR]\n`Something went wrong processing that command, try again later and if errors persist contact your administrator.`',
 				},
 			}
 		);
