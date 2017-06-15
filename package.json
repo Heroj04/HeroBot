@@ -14,6 +14,13 @@
   "author": "Jack Footner (jackrfootner@gmail.com)",
   "license": "ISC",
   "dependencies": {
-    "eris": "^0.7.0"
+    "bluebird": "^3.5.0",
+    "bufferutil": "^3.0.1",
+    "eris": "^0.7.0",
+    "erlpack": "github:hammerandchisel/erlpack",
+    "eventemitter3": "^2.0.3",
+    "node-opus": "^0.2.6",
+    "sodium-native": "^1.10.1",
+    "uws": "^0.14.5"
   }
 }
