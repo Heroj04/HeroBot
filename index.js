@@ -4,9 +4,9 @@ const fs = require(`fs`);
 var config, bot, guildData = {};
 
 function log(message, level) {
-	level = typeof level === `undefined` ? 20 : level;
+	level = typeof level === undefined ? 20 : level;
 	// Assume to only show warning and errors
-	let debug = typeof config === `undefined` ? 30 : config.debugLevel === undefined ? 30 : config.debugLevel;
+	let debug = typeof config === undefined ? 30 : config.debugLevel === undefined ? 30 : config.debugLevel;
 	if (level >= debug) {
 		switch (level) {
 			case 10:
