@@ -1,7 +1,7 @@
 const Discord = require(`eris`);
 const fs = require(`fs`);
 
-var config, bot;
+var config, bot, guildData = {};
 
 function log(message, level) {
 	level = typeof level === `undefined` ? 20 : level;
@@ -39,6 +39,35 @@ var commands = [
 			aliases: ['Ping!'],
 			description: 'Return "Pong!"',
 			fullDescription: 'It literally just sends a message in the same channel which says "Pong!"',
+		},
+	},
+	{
+		name: 'SetPrefix',
+		return: (msg, args) => {
+			if (args.length === 1) {
+				if (guildData[msg.guild.id] === undefined) guildData[msg.guild.id] = {};
+				let bkup = guildData[msg.guild.id];
+				try {
+					guildData[msg.guild.id].prefix = args[0].toLowerCase();
+					fs.writeFileSync('./guildData.json', JSON.stringify(guildData));
+					return `Set Guild Prefix to "${args[0].toLowerCase()}" Succesfully`;
+				} catch (e) {
+					guildData[msg.guild.id] = bkup;
+					return `[ERROR] Issue Saving guildData\n\`${e}\``;
+				}
+			} else {
+				return 'Incorrect syntax, please use the command followed by a single phrase or character.';
+			}
+		},
+		options: {
+			aliases: ['Prefix', 'ChangePrefix', 'RegisterPrefix'],
+			description: 'Set the command prefix',
+			fullDescription: 'Set the prefix which is put before a command, for this guild. Must have the "Administrator" permission.',
+			requirements: {
+				permissions: {
+					administrator: true,
+				},
+			},
 		},
 	},
 	{
@@ -81,16 +110,25 @@ function initialise() {
 		if (files === undefined || files.length < 2) {
 			return log(`No files are available including this one. (This error shouldn't appear but if it does you've done something very wrong)`, 40);
 		}
-		let conf = false;
+		let conf = false, guild = false;
 		for (let i = 0; i < files.length; i++) {
 			let stats = fs.statSync(files[i]);
 			if (files[i] === `config.js` && stats.isFile()) {
 				conf = true;
 			}
+			if (files[i] === `config.js` && stats.isFile()) {
+				guild = true;
+			}
 		}
 		if (!conf) {
 			log(`Config file not found, creating one now.`, 30);
 			fs.writeFileSync(`./config.js`, fs.readFileSync(`./example_config.js`));
+		}
+		if (!guild) {
+			log(`Guild file not found, creating one now.`, 30);
+			fs.writeFileSync(`./guildData.json`, '{}');
+		} else {
+			guildData = JSON.parse(fs.readFileSync('./guildData.json'));
 		}
 		log(`Loading config file ...`, 20);
 		config = require(`./config.js`);
@@ -122,13 +160,21 @@ function initialise() {
 			.on('ready', () => {
 				log(`Bot Connected and Ready`, 50);
 			});
-
+		log(`Registering Commands ...`, 20);
 		for (let i = 0; i < commands.length; i++) {
 			bot.registerCommand(
 				commands[i].name,
 				commands[i].return,
 				commands[i].options
 			);
+		}
+		log(`Setting Guild Prefixes ...`, 20);
+		for (var guildID in guildData) {
+			if (guildData.hasOwnProperty(guildID)) {
+				if (guildData[guildID].prefix !== undefined || guildData[guildID].prefix !== '') {
+					bot.refisterGuildPrefix(guildID, guildData[guildID].prefix);
+				}
+			}
 		}
 		bot.connect();
 	});
