@@ -61,6 +61,8 @@ var commands = [
 		},
 		options: {
 			aliases: ['Prefix', 'ChangePrefix', 'RegisterPrefix'],
+			usage: '<prefixChar | prefixString>',
+			argsRequired: true,
 			description: 'Set the command prefix',
 			fullDescription: 'Set the prefix which is put before a command, for this guild. Must have the "Administrator" permission.',
 			requirements: {
