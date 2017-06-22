@@ -118,7 +118,7 @@ function initialise() {
 			if (files[i] === `config.js` && stats.isFile()) {
 				conf = true;
 			}
-			if (files[i] === `config.js` && stats.isFile()) {
+			if (files[i] === `guildData.json` && stats.isFile()) {
 				guild = true;
 			}
 		}
