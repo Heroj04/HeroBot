@@ -13,4 +13,5 @@ A bot that does a little bit of everything, with easily editable command modules
 
 1. Clone the repository to your local computer
 2. Run `npm install`
-3. Run `npm start`
+3. Edit `consif.js` to include your bot token and your user ID for owner
+4. Run `npm start`
