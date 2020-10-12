@@ -4,9 +4,8 @@ const Discord = require('discord.js');
 const fs = require('fs');
 
 // Variables
-var config;
-var modules = [];
-var bot = new Discord.Client();
+const config = require('./config.js');
+const bot = new Discord.Client();
 
 // Event Handler Functions
 // Called when the bot receives a message
@@ -33,9 +32,6 @@ function onError(error) {
 // Other Functions
 // Setup the Bot
 function initialise() {
-	// Load the config
-	config = require('./config.js');
-
 	// Attatch Bot Event Functions
 	bot.on('message', onMessage);
 	bot.on('ready', onReady);
