@@ -4,7 +4,7 @@ const Discord = require('discord.js');
 const fs = require('fs');
 
 // Variables
-const config = JSON.parse(fs.readFileSync('./config.js'));
+const config = JSON.parse(fs.readFileSync('./config.json'));
 const bot = new Discord.Client();
 
 // Event Handler Functions
