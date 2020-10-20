@@ -25,7 +25,7 @@ fs.readdir(`./`, (error, files) => {
 			modules = true;
 		} else if (files[i] === `library` && stats.isDirectory()) {
 			library = true;
-		} else if (files[i] === `config.js` && stats.isFile()) {
+		} else if (files[i] === `config.json` && stats.isFile()) {
 			config = true;
 		}
 	}
@@ -41,6 +41,6 @@ fs.readdir(`./`, (error, files) => {
 	}
 	if (!config) {
 		console.log(`Config file not found, creating one now.`);
-		fs.writeFileSync(`./config.js`, fs.readFileSync(`./example_config.js`));
+		fs.writeFileSync(`./config.json`, fs.readFileSync(`./example_config.json`));
 	}
 });
