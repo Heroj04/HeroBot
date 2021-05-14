@@ -1,6 +1,6 @@
 {
 	"botToken": "1234567890poiuytrewqqwertyuiop0987654321",
-	"statusText": "@Radiobot Help",
+	"statusText": "@HeroBot Help",
 	"ownerID": ["1234567890", "0987654321"],
 	"debugLevel": 50
 }
