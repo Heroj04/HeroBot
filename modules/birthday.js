@@ -78,6 +78,22 @@ module.exports = {
 							required: false,
 						},
 					],
+					run: (data) => {
+						// Get the user (as a guild member)
+						let user = data.interaction.options[0].options?.[0]?.member;
+						if (user === undefined) {
+							user = data.interaction.member;
+						}
+
+						// Set the store
+						// Save the birthday to the store
+						if (data.store.birthdays === undefined) data.store.birthdays = {};
+						if (data.store.birthdays[data.interaction.guildID] === undefined) data.store.birthdays[data.interaction.guildID] = {};
+						if (data.store.birthdays[data.interaction.guildID][user.id] !== undefined) delete data.store.birthdays[data.interaction.guildID][user.id];
+
+						// Reply
+						data.interaction.reply(`Birthday removed for <@${user.id}>`);
+					},
 				},
 			],
 			run: (data) => {
