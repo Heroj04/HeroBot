@@ -1,24 +1,23 @@
 {
-  "name": "radiobot",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "name": "herobot",
+  "version": "2.0.0-indev",
+  "description": "A bot to do a bit of everything",
+  "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js"
+    "start": "node main.js",
+    "install": "node install.js"
   },
   "repository": {
     "type": "git",
-    "url": "www.github.com/Heroj04/Radiobot"
+    "url": "www.github.com/Heroj04/HeroBot"
   },
   "author": "Jack Footner (jackrfootner@gmail.com)",
   "license": "ISC",
   "dependencies": {
-    "discord.js": "^11.0.0",
-    "uws": "^0.14.5"
+    "discord.js": "^13.0.0-dev.652c683da7032a147313b4a8db043be5385e0656"
   },
-  "optionalDependencies": {
-    "cleverbot.io": "^1.0.4",
-    "ytdl-core": "^0.14.0"
+  "devDependencies": {
+    "eslint": "^7.27.0"
   }
 }
