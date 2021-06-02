@@ -39,6 +39,7 @@ jspm_packages
 # Personal Config File
 config.js
 config.json
+store.json
 
 # Module Libraries
 library
