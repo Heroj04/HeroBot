@@ -33,7 +33,21 @@ module.exports = {
 
 						// If the birthday string matches our date regex (https://stackoverflow.com/questions/15491894/regex-to-validate-date-format-dd-mm-yyyy)
 						let dateString = data.interaction.options[0].options[0].value;
-						if (dateString.match(/^(?:(?:31(\/|-|\.)(?:0?[13578]|1[02]))\1|(?:(?:29|30)(\/|-|\.)(?:0?[13-9]|1[0-2])\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$|^(?:29(\/|-|\.)0?2\3(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:0?[1-9]|1\d|2[0-8])(\/|-|\.)(?:(?:0?[1-9])|(?:1[0-2]))\4(?:(?:1[6-9]|[2-9]\d)?\d{2})$/)) {
+						if (dateString.match(/^(?:(?:31(\/|-|\.)(?:0?[13578]|1[02]|(?:Jan|Mar|May|Jul|Aug|Oct|Dec)))|(?:(?:29|30)(\/|-|\.)(?:0?[13-9]|1[0-2]|(?:Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec))))(?:(\/|-|\.)(?:1[6-9]|[2-9]\d)?\d{2})*$|^(?:29(\/|-|\.)(?:0?2|(?:Feb))(?:(\/|-|\.)(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00)))*)$|^(?:0?[1-9]|1\d|2[0-8])(\/|-|\.)(?:(?:0?[1-9])|(?:1[0-2])|(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec))(?:(\/|-|\.)(?:1[6-9]|[2-9]\d)?\d{2})*$/i)) {
+							// Replace Text Months with index
+							dateString
+								.replace(/Jan/i, '01')
+								.replace(/Feb/i, '02')
+								.replace(/Mar/i, '03')
+								.replace(/Apr/i, '04')
+								.replace(/May/i, '05')
+								.replace(/Jun/i, '06')
+								.replace(/Jul/i, '07')
+								.replace(/Aug/i, '08')
+								.replace(/Sep/i, '09')
+								.replace(/Oct/i, '10')
+								.replace(/Nov/i, '11')
+								.replace(/Dec/i, '12');
 							// Split it up and create a Date object
 							let dateSplit = dateString.split(/[-,/]/);
 							// Split into dd, mm, yyyy but Date takes yyyy, mm - 1, dd
@@ -48,7 +62,7 @@ module.exports = {
 							data.interaction.reply(`Birthday set for <@${user.id}>`);
 						} else {
 							// Tell the user they used the wrong format
-							data.interaction.reply('Date format incorrect, Please use "dd/mm/yyyy"');
+							data.interaction.reply('Date format incorrect, Please use "dd/mm/yyyy" or "dd/MMM/yyyy" (The year is optional)');
 						}
 					},
 				},
