@@ -32,7 +32,7 @@ module.exports = {
 						}
 
 						// If the birthday string matches our date regex (https://stackoverflow.com/questions/15491894/regex-to-validate-date-format-dd-mm-yyyy)
-						let dateString = data.interaction.options[0].options[0].value;
+						let dateString = data.interaction.options[0].options?.[0].value;
 						if (dateString.match(/^(?:(?:31(\/|-|\.)(?:0?[13578]|1[02]|(?:Jan|Mar|May|Jul|Aug|Oct|Dec)))|(?:(?:29|30)(\/|-|\.)(?:0?[13-9]|1[0-2]|(?:Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec))))(?:(\/|-|\.)(?:1[6-9]|[2-9]\d)?\d{2})*$|^(?:29(\/|-|\.)(?:0?2|(?:Feb))(?:(\/|-|\.)(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00)))*)$|^(?:0?[1-9]|1\d|2[0-8])(\/|-|\.)(?:(?:0?[1-9])|(?:1[0-2])|(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec))(?:(\/|-|\.)(?:1[6-9]|[2-9]\d)?\d{2})*$/i)) {
 							// Replace Text Months with index
 							dateString
@@ -78,6 +78,22 @@ module.exports = {
 							required: false,
 						},
 					],
+					run: (data) => {
+						// Get the user (as a guild member)
+						let user = data.interaction.options[0].options?.[0]?.member;
+						if (user === undefined) {
+							user = data.interaction.member;
+						}
+
+						// Set the store
+						// Save the birthday to the store
+						if (data.store.birthdays === undefined) data.store.birthdays = {};
+						if (data.store.birthdays[data.interaction.guildID] === undefined) data.store.birthdays[data.interaction.guildID] = {};
+						if (data.store.birthdays[data.interaction.guildID][user.id] !== undefined) delete data.store.birthdays[data.interaction.guildID][user.id];
+
+						// Reply
+						data.interaction.reply(`Birthday removed for <@${user.id}>`);
+					},
 				},
 			],
 			run: (data) => {
