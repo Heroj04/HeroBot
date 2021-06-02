@@ -1,7 +1,7 @@
 {
   "extends": "eslint:recommended",
   "parserOptions": {
-    "ecmaVersion": 6
+    "ecmaVersion": 2020
   },
   "env": {
     "es6": true,
@@ -31,7 +31,7 @@
       }
     }],
 
-    "no-mixed-spaces-and-tabs": "smart-tabs",
+    "no-mixed-spaces-and-tabs": ["error", "smart-tabs"],
     "accessor-pairs": "warn",
     "array-callback-return": "error",
     "complexity": "warn",
@@ -110,7 +110,7 @@
     "quote-props": ["error", "as-needed"],
     "quotes": ["error", "single", { "avoidEscape": true, "allowTemplateLiterals": true }],
     "semi-spacing": "error",
-    "semi": "error",
+    "semi": ["error", "always"],
     "space-before-blocks": "error",
     "space-before-function-paren": ["error", "never"],
     "space-in-parens": "error",

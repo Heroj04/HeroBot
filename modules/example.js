@@ -4,34 +4,29 @@ module.exports = {
 	commands: [
 		{
 			name: 'ping',
-			description: 'responds with pong',
-			alias: [
-				'pang',
-				'pung',
-			],
-			run: (message) => 'pong',
-			subCommands: [
-				{
-					name: 'ping',
-					description: 'responds with pong pong',
-					run: (message) => 'pong pong',
-				},
-			],
+			description: 'reply with pong',
+			run: (data) => {
+				// Reply pong
+				data.interaction.reply('pong');
+			},
 		},
 		{
-			name: 'foo',
-			description: 'responds with bar',
-			run: (message) => 'bar',
-			subCommands: [
+			name: 'echo',
+			description: 'Echo back whatever is sent',
+			options: [
 				{
-					name: 'foo',
-					description: 'responds with bar bar',
-					alias: [
-						'fab',
-					],
-					run: (message) => 'bar bar',
+					name: 'input',
+					type: 'STRING',
+					description: 'The input which should be echoed back',
+					required: true,
 				},
 			],
+			run: (data) => {
+				// Get the input of the user
+				const input = data.interaction.options[0].value;
+				// Reply to the command
+				data.interaction.reply(input);
+			},
 		},
 	],
 };

@@ -15,7 +15,8 @@ fs.readdir(`./`, (error, files) => {
 	// Setup some variables
 	let modules = false,
 		library = false,
-		config = false;
+		config = false,
+		store = false;
 
 	// Iterate over each item looking for what needs to be setup
 	for (var i = 0; i < files.length; i++) {
@@ -27,9 +28,11 @@ fs.readdir(`./`, (error, files) => {
 			library = true;
 		} else if (files[i] === `config.json` && stats.isFile()) {
 			config = true;
+		} else if (files[i] === `store.json` && stats.isFile()) {
+			store = true;
 		}
 	}
-	
+
 	// Setup anything thats not already setup
 	if (!modules) {
 		console.log(`Modules folder not found, creating one now.`);
@@ -42,5 +45,9 @@ fs.readdir(`./`, (error, files) => {
 	if (!config) {
 		console.log(`Config file not found, creating one now.`);
 		fs.writeFileSync(`./config.json`, fs.readFileSync(`./example_config.json`));
+	}
+	if (!store) {
+		console.log(`Store file not found, creating one now.`);
+		fs.writeFileSync(`./store.json`, '{}');
 	}
 });
