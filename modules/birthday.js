@@ -54,9 +54,8 @@ module.exports = {
 							let date = new Date(dateSplit[2] ?? 2000, dateSplit[1] - 1, dateSplit[0]);
 
 							// Save the birthday to the store
-							if (data.store.birthdays === undefined) data.store.birthdays = {};
-							if (data.store.birthdays[data.interaction.guildID] === undefined) data.store.birthdays[data.interaction.guildID] = {};
-							data.store.birthdays[data.interaction.guildID][user.id] = date;
+							if (data.store[data.interaction.guildID] === undefined) data.store[data.interaction.guildID] = {};
+							data.store[data.interaction.guildID][user.id] = date;
 
 							// Reply
 							data.interaction.reply(`Birthday set for <@${user.id}>`);
@@ -86,10 +85,9 @@ module.exports = {
 						}
 
 						// Set the store
-						// Save the birthday to the store
-						if (data.store.birthdays === undefined) data.store.birthdays = {};
-						if (data.store.birthdays[data.interaction.guildID] === undefined) data.store.birthdays[data.interaction.guildID] = {};
-						if (data.store.birthdays[data.interaction.guildID][user.id] !== undefined) delete data.store.birthdays[data.interaction.guildID][user.id];
+						// Remove the birthday from the store
+						if (data.store[data.interaction.guildID] === undefined) data.store[data.interaction.guildID] = {};
+						if (data.store[data.interaction.guildID][user.id] !== undefined) delete data.store[data.interaction.guildID][user.id];
 
 						// Reply
 						data.interaction.reply(`Birthday removed for <@${user.id}>`);
