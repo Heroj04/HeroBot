@@ -140,11 +140,12 @@ function onReady() {
 
 	// Interval Functions
 	bot.setInterval(() => {
+		console.log('interval time');
 		// For each module
 		for (const moduleName in modules) {
 			if (!Object.hasOwnProperty.call(modules, moduleName)) continue;
 			const module = modules[moduleName];
-			if (typeof module.runOnInterval !== 'function') {
+			if (typeof module.runOnInterval === 'function') {
 				module.runOnInterval({
 					bot: bot,
 					store: store[moduleName],
