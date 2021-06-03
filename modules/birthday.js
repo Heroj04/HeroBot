@@ -51,7 +51,7 @@ module.exports = {
 							// Split it up and create a Date object
 							let dateSplit = dateString.split(/[-,/]/);
 							// Split into dd, mm, yyyy but Date takes yyyy, mm - 1, dd
-							let date = new Date(dateSplit[2], dateSplit[1] - 1, dateSplit[0]);
+							let date = new Date(dateSplit[2] ?? 2000, dateSplit[1] - 1, dateSplit[0]);
 
 							// Save the birthday to the store
 							if (data.store.birthdays === undefined) data.store.birthdays = {};
