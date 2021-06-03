@@ -96,10 +96,6 @@ module.exports = {
 					},
 				},
 			],
-			run: (data) => {
-				// Reply pong
-				data.interaction.reply(data.store.toString());
-			},
 		},
 	],
 };
