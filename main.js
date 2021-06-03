@@ -138,6 +138,21 @@ function onReady() {
 		}
 	}
 
+	// Interval Functions
+	bot.setInterval(() => {
+		// For each module
+		for (const moduleName in modules) {
+			if (!Object.hasOwnProperty.call(modules, moduleName)) continue;
+			const module = modules[moduleName];
+			if (typeof module.runOnInterval !== 'function') {
+				module.runOnInterval({
+					bot: bot,
+					store: store[moduleName],
+				});
+			}
+		}
+	}, config.intervalFunctionTime);
+
 	console.log('ready');
 }
 
