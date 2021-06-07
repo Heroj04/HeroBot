@@ -121,7 +121,7 @@ module.exports = {
 						// Update Settings
 						if (error.length === 0) {
 							data.store[data.interaction.guildID] = data.store[data.interaction.guildID] ?? {};
-							data.store[data.interaction.guildID].braodcastChannel = channel ?? data.store[data.interaction.guildID].braodcastChannel;
+							data.store[data.interaction.guildID].broadcastChannel = channel.id ?? data.store[data.interaction.guildID].broadcastChannel;
 						}
 
 						// Reply
@@ -140,4 +140,31 @@ module.exports = {
 			],
 		},
 	],
+	runOnInterval: data => {
+		// Get Todays Date
+		let today = new Date();
+
+		// For Each Guild Saved
+		for (const guildID in data.store) {
+			if (!Object.hasOwnProperty.call(data.store, guildID)) continue;
+			const guildData = data.store[guildID];
+			if (data.store[guildID].broadcastChannel) {
+				// For each user with saved data
+				for (const userID in guildData.users) {
+					if (!Object.hasOwnProperty.call(guildData.users, userID)) continue;
+					const birthdate = new Date(guildData.users[userID]);
+					// If birthday day and month match today and the last message wasnt this year
+					if (birthdate.getMonth() === today.getMonth() && birthdate.getDay() === today.getDay() && guildData.lastMessage?.[userID] !== today.getYear()) {
+						// Today is their birthday
+						data.bot.guilds.resolve(guildID).channels.resolve(data.store[guildID].broadcastChannel).send(`Happy Birthday, <@${userID}>`)
+							.then(() => {
+								// Set the last Message Year to prevent double messaging
+								if (guildData.lastMessage === undefined) guildData.lastMessage = {};
+								guildData.lastMessage[userID] = today.getYear();
+							});
+					}
+				}
+			}
+		}
+	},
 };
