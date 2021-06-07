@@ -1,6 +1,6 @@
 {
   "name": "herobot",
-  "version": "2.0.0-indev",
+  "version": "2.0.0",
   "description": "A bot to do a bit of everything",
   "main": "main.js",
   "scripts": {
