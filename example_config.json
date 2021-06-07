@@ -1,0 +1,8 @@
+{
+	"botToken": "1234567890poiuytrewqqwertyuiop0987654321",
+	"statusText": "// HeroBot",
+	"ownerID": ["1234567890", "0987654321"],
+	"testGuild": "1234567890",
+	"debugLevel": 50,
+	"intervalFunctionTime": 30000
+}
