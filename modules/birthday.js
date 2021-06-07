@@ -1,7 +1,6 @@
 module.exports = {
 	name: 'Birthday',
 	description: 'Send birthday messages to users',
-	test: true,
 	commands: [
 		{
 			name: 'birthday',
