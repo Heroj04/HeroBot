@@ -1,6 +1,7 @@
 module.exports = {
 	name: 'Birthday',
 	description: 'Send birthday messages to users',
+	test: true,
 	commands: [
 		{
 			name: 'birthday',
@@ -91,6 +92,47 @@ module.exports = {
 
 						// Reply
 						data.interaction.reply(`Birthday removed for <@${user.id}>`);
+					},
+				},
+				{
+					name: 'settings',
+					type: 'SUB_COMMAND',
+					description: 'Change guild Settings for birthday module',
+					options: [
+						{
+							name: 'broadcast-channel',
+							type: 'CHANNEL',
+							description: 'The text channel the bot broadcasts birthday messages to',
+							required: false,
+						},
+					],
+					run: data => {
+						// Get values
+						let channel = data.interaction.options[0].options?.find(element => element.name === 'broadcast-channel')?.channel;
+
+						// Validate
+						let error = [];
+						if (channel !== undefined && !channel.isText()) {
+							error.push('Provided Channel is not a text channel');
+						}
+
+						// Update Settings
+						if (error.length === 0) {
+							data.store[data.interaction.guildID] = data.store[data.interaction.guildID] ?? {};
+							data.store[data.interaction.guildID].braodcastChannel = channel ?? data.store[data.interaction.guildID].braodcastChannel;
+						}
+
+						// Reply
+						if (error.length === 0) {
+							data.interaction.reply('Settings Updated Successfuly');
+						} else {
+							let replyString = 'Errors: ';
+							for (let index = 0; index < error.length; index++) {
+								const errorText = error[index];
+								replyString += `\n${errorText}`;
+							}
+							data.interaction.reply(replyString);
+						}
 					},
 				},
 			],
