@@ -15,7 +15,8 @@
   "author": "Jack Footner (jackrfootner@gmail.com)",
   "license": "ISC",
   "dependencies": {
-    "discord.js": "^13.0.0-dev.652c683da7032a147313b4a8db043be5385e0656"
+    "discord.js": "^13.0.0-dev.652c683da7032a147313b4a8db043be5385e0656",
+    "scryfall-client": "^0.18.6"
   },
   "devDependencies": {
     "eslint": "^7.27.0"
