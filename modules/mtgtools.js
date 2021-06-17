@@ -1,5 +1,46 @@
 const Scryfall = require('scryfall-client');
 
+/*
+
+   ______                _   _
+  |  ____|              | | (_)
+  | |__ _   _ _ __   ___| |_ _  ___  _ __  ___
+  |  __| | | | '_ \ / __| __| |/ _ \| '_ \/ __|
+  | |  | |_| | | | | (__| |_| | (_) | | | \__ \
+  |_|   \__,_|_| |_|\___|\__|_|\___/|_| |_|___/
+
+
+*/
+
+function getIDType(searchString) {
+	let returnType;
+	// Work out what the user provided
+	if (searchString.match(/^\w{8}-\w{4}-\w{4}-\w{4}-\w{12}$/i)) {
+		// Is a scryfall ID
+		returnType = 'scryfall';
+	} else if (searchString.match(/^\d{1,6}$/)) {
+		// Some sort of other ID, Assume Multiverse ID
+		returnType = 'multiverse';
+	} else {
+		// Assume Fuzzy Name
+		returnType = 'fuzzyName';
+	}
+	return returnType;
+}
+
+/*
+
+   ______                       _
+  |  ____|                     | |
+  | |__  __  ___ __   ___  _ __| |_
+  |  __| \ \/ / '_ \ / _ \| '__| __|
+  | |____ >  <| |_) | (_) | |  | |_
+  |______/_/\_\ .__/ \___/|_|   \__|
+              | |
+              |_|
+
+*/
+
 module.exports = {
 	name: 'Magic: The Gathering Tools',
 	description: 'A series of MTG tools',
@@ -67,17 +108,7 @@ module.exports = {
 				let search = data.interaction.options[0].value;
 				let idType = data.interaction.options[1]?.value;
 				if (idType === undefined) {
-					// Work out what the user provided
-					if (search.match(/^\w{8}-\w{4}-\w{4}-\w{4}-\w{12}$/i)) {
-						// Is a scryfall ID
-						idType = 'scryfall';
-					} else if (search.match(/^\d{1,6}$/)) {
-						// Some sort of other ID, Assume Multiverse ID
-						idType = 'multiverse';
-					} else {
-						// Assume Fuzzy Name
-						idType = 'fuzzyName';
-					}
+					idType = getIDType(search);
 				}
 
 				// Search Scryfall
