@@ -15,7 +15,13 @@
   "author": "Jack Footner (jackrfootner@gmail.com)",
   "license": "ISC",
   "dependencies": {
+    "atob": "^2.1.2",
+    "btoa": "^1.2.1",
+    "canvas": "^2.8.0",
+    "changedpi": "^1.0.4",
     "discord.js": "^13.0.0-dev.652c683da7032a147313b4a8db043be5385e0656",
+    "form-data": "^4.0.0",
+    "node-fetch": "^2.6.1",
     "scryfall-client": "^0.18.6"
   },
   "devDependencies": {
