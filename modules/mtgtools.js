@@ -866,7 +866,10 @@ function testConditions(conditions, data) {
 						// In array
 						results.push(subConditionData.includes(data[key]));
 						break;
-
+					case '$includes':
+						// In array
+						results.push(data[key].includes(subConditionData));
+						break;
 					default:
 						// Checking sub Objects
 						results.push(testConditions(element, data[key]));
@@ -906,6 +909,7 @@ function testConditions(conditions, data) {
 module.exports = {
 	name: 'Magic: The Gathering Tools',
 	description: 'A series of MTG tools',
+	test: true,
 	commands: [
 		{
 			name: 'generate-proxy',
