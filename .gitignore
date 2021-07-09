@@ -43,3 +43,6 @@ store.json
 
 # Module Libraries
 library
+
+# VSCode Files
+.vscode
