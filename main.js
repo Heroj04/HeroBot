@@ -67,6 +67,7 @@ function onInteraction(interaction) {
 					subCommand.run({
 						interaction: interaction,
 						store: store[moduleName],
+						config: config,
 					});
 				} else if (interaction.options.some((element) => element.type === 'SUB_COMMAND_GROUP')) {
 					// Run the SubCommandGroup SubCommand function
@@ -76,6 +77,7 @@ function onInteraction(interaction) {
 					subCommand.run({
 						interaction: interaction,
 						store: store[moduleName],
+						config: config,
 					});
 				} else {
 					// Run the command function
@@ -83,6 +85,7 @@ function onInteraction(interaction) {
 					command.run({
 						interaction: interaction,
 						store: store[moduleName],
+						config: config,
 					});
 				}
 			}
@@ -208,7 +211,10 @@ function initialise() {
  * Loads all found modules into the bot
  */
 function loadModules() {
-	fs.readdir('./modules/', (error, files) => {
+	fs.readdir('./modules/', { withFileTypes: true }, (error, dirents) => {
+		const files = dirents
+			.filter(dirent => dirent.isFile())
+			.map(dirent => dirent.name);
 		if (error) {
 			// Failed to read the directory
 			throw new Error(`Issue reading base folder: ${error.message}`);
