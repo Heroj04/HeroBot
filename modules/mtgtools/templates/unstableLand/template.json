@@ -145,7 +145,15 @@
 					"height": 4488,
 					"fillStyle": "#F5E9E7",
 					"conditions": {
-						"color_identity": { "0": "W" }
+						"color_identity": { "$includes": "W" },
+						"$not": {
+							"$or": [
+								{ "color_identity": { "$includes": "U" } },
+								{ "color_identity": { "$includes": "B" } },
+								{ "color_identity": { "$includes": "R" } },
+								{ "color_identity": { "$includes": "G" } }
+							]
+						}
 					}
 				},
 				{
@@ -157,7 +165,15 @@
 					"height": 4488,
 					"fillStyle": "#026BA4",
 					"conditions": {
-						"color_identity": { "0": "U" }
+						"color_identity": { "$includes": "U" },
+						"$not": {
+							"$or": [
+								{ "color_identity": { "$includes": "W" } },
+								{ "color_identity": { "$includes": "B" } },
+								{ "color_identity": { "$includes": "R" } },
+								{ "color_identity": { "$includes": "G" } }
+							]
+						}
 					}
 				},
 				{
@@ -169,7 +185,15 @@
 					"height": 4488,
 					"fillStyle": "#262A2A",
 					"conditions": {
-						"color_identity": { "0": "B" }
+						"color_identity": { "$includes": "B" },
+						"$not": {
+							"$or": [
+								{ "color_identity": { "$includes": "W" } },
+								{ "color_identity": { "$includes": "U" } },
+								{ "color_identity": { "$includes": "R" } },
+								{ "color_identity": { "$includes": "G" } }
+							]
+						}
 					}
 				},
 				{
@@ -181,7 +205,15 @@
 					"height": 4488,
 					"fillStyle": "#E74C36",
 					"conditions": {
-						"color_identity": { "0": "R" }
+						"color_identity": { "$includes": "WR" },
+						"$not": {
+							"$or": [
+								{ "color_identity": { "$includes": "W" } },
+								{ "color_identity": { "$includes": "U" } },
+								{ "color_identity": { "$includes": "B" } },
+								{ "color_identity": { "$includes": "G" } }
+							]
+						}
 					}
 				},
 				{
@@ -193,7 +225,15 @@
 					"height": 4488,
 					"fillStyle": "#037040",
 					"conditions": {
-						"color_identity": { "0": "G" }
+						"color_identity": { "$includes": "G" },
+						"$not": {
+							"$or": [
+								{ "color_identity": { "$includes": "W" } },
+								{ "color_identity": { "$includes": "U" } },
+								{ "color_identity": { "$includes": "B" } },
+								{ "color_identity": { "$includes": "R" } }
+							]
+						}
 					}
 				},
 				{
@@ -205,7 +245,15 @@
 					"height": 4488,
 					"fillStyle": "#CDC1BB",
 					"conditions": {
-						"color_identity": { "0" : { "$not": { "$in": ["W", "U", "B", "R", "G"] } } }
+						"$not": {
+							"$or": [
+								{ "color_identity": { "$includes": "W" } },
+								{ "color_identity": { "$includes": "U" } },
+								{ "color_identity": { "$includes": "B" } },
+								{ "color_identity": { "$includes": "R" } },
+								{ "color_identity": { "$includes": "G" } }
+							]
+						}
 					}
 				},
 				{
