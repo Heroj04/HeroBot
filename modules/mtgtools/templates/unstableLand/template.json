@@ -137,104 +137,167 @@
 			"height": 4488,
 			"layers": [
 				{
-					"type": "fill",
-					"description": "Plains",
+					"type": "group",
+					"description": "Frame Left/Only Colour",
 					"originX": 0,
 					"originY": 0,
 					"width": 3288,
 					"height": 4488,
-					"fillStyle": "#F5E9E7",
 					"conditions": {
-						"color_identity": { "$includes": "W" },
-						"$not": {
-							"$or": [
-								{ "color_identity": { "$includes": "U" } },
-								{ "color_identity": { "$includes": "B" } },
-								{ "color_identity": { "$includes": "R" } },
-								{ "color_identity": { "$includes": "G" } }
-							]
+						"$or": [
+							{ "color_identity": { "$length": 1 } },
+							{ "color_identity": { "$length": 2 } }
+						]
+					},
+					"layers": [
+						{
+							"type": "fill",
+							"description": "Plains",
+							"originX": 0,
+							"originY": 0,
+							"width": 3288,
+							"height": 4488,
+							"fillStyle": "#F5E9E7",
+							"conditions": {
+								"color_identity": { "0": "W" }
+							}
+						},
+						{
+							"type": "fill",
+							"description": "Island",
+							"originX": 0,
+							"originY": 0,
+							"width": 3288,
+							"height": 4488,
+							"fillStyle": "#026BA4",
+							"conditions": {
+								"color_identity": { "0": "U" }
+							}
+						},
+						{
+							"type": "fill",
+							"description": "Swamp",
+							"originX": 0,
+							"originY": 0,
+							"width": 3288,
+							"height": 4488,
+							"fillStyle": "#262A2A",
+							"conditions": {
+								"color_identity": { "0": "B" }
+							}
+						},
+						{
+							"type": "fill",
+							"description": "Mountain",
+							"originX": 0,
+							"originY": 0,
+							"width": 3288,
+							"height": 4488,
+							"fillStyle": "#E74C36",
+							"conditions": {
+								"color_identity": { "0": "R" }
+							}
+						},
+						{
+							"type": "fill",
+							"description": "Forest",
+							"originX": 0,
+							"originY": 0,
+							"width": 3288,
+							"height": 4488,
+							"fillStyle": "#037040",
+							"conditions": {
+								"color_identity": { "0": "G" }
+							}
 						}
-					}
+					]
 				},
 				{
-					"type": "fill",
-					"description": "Island",
+					"type": "group",
+					"description": "Frame Right Colour",
 					"originX": 0,
 					"originY": 0,
 					"width": 3288,
 					"height": 4488,
-					"fillStyle": "#026BA4",
 					"conditions": {
-						"color_identity": { "$includes": "U" },
-						"$not": {
-							"$or": [
-								{ "color_identity": { "$includes": "W" } },
-								{ "color_identity": { "$includes": "B" } },
-								{ "color_identity": { "$includes": "R" } },
-								{ "color_identity": { "$includes": "G" } }
+						"color_identity": { "$length": 2 }
+					},
+					"layers": [
+						{
+							"type": "fill",
+							"description": "Plains",
+							"originX": 0,
+							"originY": 0,
+							"width": 3288,
+							"height": 4488,
+							"fillStyle": "#F5E9E7",
+							"conditions": {
+								"color_identity": { "1": "W" }
+							}
+						},
+						{
+							"type": "fill",
+							"description": "Island",
+							"originX": 0,
+							"originY": 0,
+							"width": 3288,
+							"height": 4488,
+							"fillStyle": "#026BA4",
+							"conditions": {
+								"color_identity": { "1": "U" }
+							}
+						},
+						{
+							"type": "fill",
+							"description": "Swamp",
+							"originX": 0,
+							"originY": 0,
+							"width": 3288,
+							"height": 4488,
+							"fillStyle": "#262A2A",
+							"conditions": {
+								"color_identity": { "1": "B" }
+							}
+						},
+						{
+							"type": "fill",
+							"description": "Mountain",
+							"originX": 0,
+							"originY": 0,
+							"width": 3288,
+							"height": 4488,
+							"fillStyle": "#E74C36",
+							"conditions": {
+								"color_identity": { "1": "R" }
+							}
+						},
+						{
+							"type": "fill",
+							"description": "Forest",
+							"originX": 0,
+							"originY": 0,
+							"width": 3288,
+							"height": 4488,
+							"fillStyle": "#037040",
+							"conditions": {
+								"color_identity": { "1": "G" }
+							}
+						},
+						{
+							"type": "mask",
+							"description": "Frame Right Blend Mask",
+							"url": "./modules/mtgtools/templates/unstableLand/DualColour-Right.png",
+							"originX": 0,
+							"originY": 0,
+							"width": 3288,
+							"height": 4488,
+							"scale": "fill",
+							"operations": [
+								"multiply",
+								"destination-in"
 							]
 						}
-					}
-				},
-				{
-					"type": "fill",
-					"description": "Swamp",
-					"originX": 0,
-					"originY": 0,
-					"width": 3288,
-					"height": 4488,
-					"fillStyle": "#262A2A",
-					"conditions": {
-						"color_identity": { "$includes": "B" },
-						"$not": {
-							"$or": [
-								{ "color_identity": { "$includes": "W" } },
-								{ "color_identity": { "$includes": "U" } },
-								{ "color_identity": { "$includes": "R" } },
-								{ "color_identity": { "$includes": "G" } }
-							]
-						}
-					}
-				},
-				{
-					"type": "fill",
-					"description": "Mountain",
-					"originX": 0,
-					"originY": 0,
-					"width": 3288,
-					"height": 4488,
-					"fillStyle": "#E74C36",
-					"conditions": {
-						"color_identity": { "$includes": "WR" },
-						"$not": {
-							"$or": [
-								{ "color_identity": { "$includes": "W" } },
-								{ "color_identity": { "$includes": "U" } },
-								{ "color_identity": { "$includes": "B" } },
-								{ "color_identity": { "$includes": "G" } }
-							]
-						}
-					}
-				},
-				{
-					"type": "fill",
-					"description": "Forest",
-					"originX": 0,
-					"originY": 0,
-					"width": 3288,
-					"height": 4488,
-					"fillStyle": "#037040",
-					"conditions": {
-						"color_identity": { "$includes": "G" },
-						"$not": {
-							"$or": [
-								{ "color_identity": { "$includes": "W" } },
-								{ "color_identity": { "$includes": "U" } },
-								{ "color_identity": { "$includes": "B" } },
-								{ "color_identity": { "$includes": "R" } }
-							]
-						}
-					}
+					]
 				},
 				{
 					"type": "fill",
@@ -245,15 +308,25 @@
 					"height": 4488,
 					"fillStyle": "#CDC1BB",
 					"conditions": {
-						"$not": {
-							"$or": [
-								{ "color_identity": { "$includes": "W" } },
-								{ "color_identity": { "$includes": "U" } },
-								{ "color_identity": { "$includes": "B" } },
-								{ "color_identity": { "$includes": "R" } },
-								{ "color_identity": { "$includes": "G" } }
-							]
+						"color_identity": {
+							"$length": 0
 						}
+					}
+				},
+				{
+					"type": "fill",
+					"description": "Multicolored",
+					"originX": 0,
+					"originY": 0,
+					"width": 3288,
+					"height": 4488,
+					"fillStyle": "#EFD16B",
+					"conditions": {
+						"$or": [
+							{ "color_identity": { "$length": 3 } },
+							{ "color_identity": { "$length": 4 } },
+							{ "color_identity": { "$length": 5 } }
+						]
 					}
 				},
 				{
