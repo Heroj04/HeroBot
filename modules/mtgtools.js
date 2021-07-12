@@ -339,6 +339,10 @@ async function scaleTextLayer(layer) {
 			settings: {
 				font: layer.font,
 				fillStyle: layer.fillStyle,
+				shadowColor: layer.shadowColor,
+				shadowBlur: layer.shadowBlur,
+				shadowOffsetX: layer.shadowOffsetX,
+				shadowOffsetY: layer.shadowOffsetY,
 			},
 		},
 	];
@@ -392,6 +396,11 @@ async function scaleTextLayer(layer) {
 			// Set the context
 			context.fillStyle = textObject.settings.fillStyle;
 			context.font = textObject.settings.font;
+			// Shadow
+			context.shadowColor = textObject.settings.shadowColor;
+			context.shadowBlur = textObject.settings.shadowBlur;
+			context.shadowOffsetX = textObject.settings.shadowOffsetX;
+			context.shadowOffsetY = textObject.settings.shadowOffsetY;
 			// Write to context
 			context.fillText(textObject.text, x, y);
 			// Set the new x position
