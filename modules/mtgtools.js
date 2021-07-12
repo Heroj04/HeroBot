@@ -870,6 +870,10 @@ function testConditions(conditions, data) {
 						// In array
 						results.push(data[key].includes(subConditionData));
 						break;
+					case '$length':
+						// Length of array
+						results.push(data[key].length === subConditionData);
+						break;
 					default:
 						// Checking sub Objects
 						results.push(testConditions(element, data[key]));
