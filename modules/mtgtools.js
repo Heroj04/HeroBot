@@ -193,7 +193,7 @@ async function buildImage(template, data) {
 
 	// Draw each layer
 	// Use a normal for loop here to get around async anonymous functions
-	for (let index = template.layers.length - 1; index >= 0; index--) {
+	for (let index = 0; index < template.layers.length; index++) {
 		const layer = template.layers[index];
 		try {
 			console.log(`Processing Layer: ${layer.description}`);

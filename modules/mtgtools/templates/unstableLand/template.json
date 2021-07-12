@@ -30,102 +30,16 @@
 	],
 	"layers": [
 		{
-			"type": "text",
-			"description": "Card Name",
-			"text": "",
-			"font": "bold 150px Beleren2016",
-			"fillStyle": "white",
-			"originX": 600,
-			"originY": 215,
-			"width": 2088,
-			"height": 150,
-			"align": "center",
-			"baseline": "bottom",
-			"wrapText": false,
-			"scaleText": false,
-			"lineSpacing": 1.4,
+			"type": "image",
+			"description": "Art",
+			"url": "",
+			"originX": 0,
+			"originY": 0,
+			"width": 3288,
+			"height": 4488,
+			"scale": "fill",
 			"inputs": {
-				"text": "name"
-			}
-		},
-		{
-			"type": "text",
-			"description": "Legal",
-			"text": "Custom Proxy • (NOT FOR SALE)",
-			"font": "70px Calibri",
-			"fillStyle": "white",
-			"originX": 334,
-			"originY": 4080,
-			"width": 2620,
-			"height": 70,
-			"align": "start",
-			"baseline": "top",
-			"wrapText": false,
-			"scaleText": false,
-			"lineSpacing": 1.4,
-			"inputs": {
-				"text": "legal"
-			},
-			"fontReplace": [
-				{
-					"open": "(",
-					"close": ")",
-					"settings": {
-						"font": "bold 70px Beleren2016",
-						"fillStyle": "white"
-					}
-				}
-			]
-		},
-		{
-			"type": "text",
-			"description": "Artist",
-			"text": "",
-			"font": "bold 70px Beleren-Small-Caps",
-			"fillStyle": "white",
-			"originX": 334,
-			"originY": 4150,
-			"width": 2620,
-			"height": 70,
-			"align": "start",
-			"baseline": "top",
-			"wrapText": false,
-			"scaleText": false,
-			"lineSpacing": 1.4,
-			"inputs": {
-				"text": "artist"
-			},
-			"textReplace": {
-				"{NIB}": "{a}"
-			},
-			"fontReplace": [
-				{
-					"open": "{",
-					"close": "}",
-					"settings": {
-						"font": "70px NDPMTG",
-						"fillStyle": "white"
-					}
-				}
-			]
-		},
-		{
-			"type": "text",
-			"description": "Copyright",
-			"text": "™ & © 2020 Wizards of the Coast",
-			"font": "70px MPlantin",
-			"fillStyle": "white",
-			"originX": 334,
-			"originY": 4080,
-			"width": 2620,
-			"height": 70,
-			"align": "right",
-			"baseline": "top",
-			"wrapText": false,
-			"scaleText": false,
-			"lineSpacing": 1.4,
-			"inputs": {
-				"text": "copyright"
+				"url": "art"
 			}
 		},
 		{
@@ -349,17 +263,113 @@
 			]
 		},
 		{
-			"type": "image",
-			"description": "Art",
-			"url": "",
+			"type": "group",
+			"description": "Card Text",
 			"originX": 0,
 			"originY": 0,
 			"width": 3288,
 			"height": 4488,
-			"scale": "fill",
-			"inputs": {
-				"url": "art"
-			}
+			"layers": [
+				{
+					"type": "text",
+					"description": "Card Name",
+					"text": "",
+					"font": "bold 150px Beleren2016",
+					"fillStyle": "white",
+					"originX": 600,
+					"originY": 215,
+					"width": 2088,
+					"height": 150,
+					"align": "center",
+					"baseline": "bottom",
+					"wrapText": false,
+					"scaleText": false,
+					"lineSpacing": 1.4,
+					"inputs": {
+						"text": "name"
+					}
+				},
+				{
+					"type": "text",
+					"description": "Legal",
+					"text": "Custom Proxy • (NOT FOR SALE)",
+					"font": "70px Calibri",
+					"fillStyle": "white",
+					"originX": 334,
+					"originY": 4080,
+					"width": 2620,
+					"height": 70,
+					"align": "start",
+					"baseline": "top",
+					"wrapText": false,
+					"scaleText": false,
+					"lineSpacing": 1.4,
+					"inputs": {
+						"text": "legal"
+					},
+					"fontReplace": [
+						{
+							"open": "(",
+							"close": ")",
+							"settings": {
+								"font": "bold 70px Beleren2016",
+								"fillStyle": "white"
+							}
+						}
+					]
+				},
+				{
+					"type": "text",
+					"description": "Artist",
+					"text": "",
+					"font": "bold 70px Beleren-Small-Caps",
+					"fillStyle": "white",
+					"originX": 334,
+					"originY": 4150,
+					"width": 2620,
+					"height": 70,
+					"align": "start",
+					"baseline": "top",
+					"wrapText": false,
+					"scaleText": false,
+					"lineSpacing": 1.4,
+					"inputs": {
+						"text": "artist"
+					},
+					"textReplace": {
+						"{NIB}": "{a}"
+					},
+					"fontReplace": [
+						{
+							"open": "{",
+							"close": "}",
+							"settings": {
+								"font": "70px NDPMTG",
+								"fillStyle": "white"
+							}
+						}
+					]
+				},
+				{
+					"type": "text",
+					"description": "Copyright",
+					"text": "™ & © 2020 Wizards of the Coast",
+					"font": "70px MPlantin",
+					"fillStyle": "white",
+					"originX": 334,
+					"originY": 4080,
+					"width": 2620,
+					"height": 70,
+					"align": "right",
+					"baseline": "top",
+					"wrapText": false,
+					"scaleText": false,
+					"lineSpacing": 1.4,
+					"inputs": {
+						"text": "copyright"
+					}
+				}
+			]
 		}
 	]
 }
