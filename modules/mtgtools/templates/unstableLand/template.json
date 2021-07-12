@@ -325,7 +325,10 @@
 						"$or": [
 							{ "color_identity": { "$length": 3 } },
 							{ "color_identity": { "$length": 4 } },
-							{ "color_identity": { "$length": 5 } }
+							{ "color_identity": { "$length": 5 } },
+							{ "produced_mana": { "$length": 3 } },
+							{ "produced_mana": { "$length": 4 } },
+							{ "produced_mana": { "$length": 5 } }
 						]
 					}
 				},
