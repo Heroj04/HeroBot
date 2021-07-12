@@ -98,50 +98,26 @@ function onInteraction(interaction) {
  */
 function onReady() {
 	console.log('Registering Commands');
-	// Register all test commands on test Guild
-	bot.guilds.fetch(config.testGuild)
-		.then((guild) => {
-			// For each module
-			for (const moduleName in modules) {
-				if (!Object.hasOwnProperty.call(modules, moduleName)) continue;
-				const module = modules[moduleName];
-				if (module.test) {
-					console.log(`Registering Module ${moduleName}`);
-					// For each command in each module
-					module.commands.forEach(command => {
-						console.log(`Registering Command ${command.name}`);
-						// Register the command
-						guild.commands.create(command)
-							.then(() => { console.log(`Succesfully registered ${command.name}`); })
-							.catch((e) => {
-								console.log(`Error registering ${command.name}`);
-								console.log(e);
-							});
-					});
+	// Register commands on Guilds
+	bot.guilds.fetch().then(guildCollection => {
+		guildCollection.forEach(partialGuild => {
+			partialGuild.fetch().then(guild => {
+				// For each module
+				for (const moduleName in modules) {
+					if (!Object.hasOwnProperty.call(modules, moduleName)) continue;
+					const module = modules[moduleName];
+					// If this module is enabled on this guild
+					if (store.enabledModules?.[guild.id]?.includes(moduleName)) {
+						// For each command in each module
+						module.commands.forEach(command => {
+							// Register the command
+							guild.commands.create(command);
+						});
+					}
 				}
-			}
-		})
-		.catch(console.log);
-	// Register all commands
-	// For each module
-	for (const moduleName in modules) {
-		if (!Object.hasOwnProperty.call(modules, moduleName)) continue;
-		const module = modules[moduleName];
-		if (!module.test) {
-			console.log(`Registering Module ${moduleName}`);
-			// For each command in each module
-			module.commands.forEach(command => {
-				console.log(`Registering Command ${command.name}`);
-				// Register the command
-				bot.application.commands.create(command)
-					.then(() => { console.log(`Succesfully registered ${command.name}`); })
-					.catch((e) => {
-						console.log(`Error registering ${command.name}`);
-						console.log(e);
-					});
 			});
-		}
-	}
+		});
+	});
 
 	// Interval Functions
 	bot.setInterval(() => {
