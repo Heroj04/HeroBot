@@ -259,6 +259,24 @@ async function modulesCommand(interaction) {
 			interaction.reply(reply);
 			break;
 		}
+		case 'enable': {
+			let moduleToEnable = options[0].value;
+			if (module[moduleToEnable] === undefined) {
+				interaction.reply(`Module \`${moduleToEnable}\` does not exist`);
+			} else if (store.enabledModules?.[interaction.guildID]?.includes(moduleToEnable)) {
+				interaction.reply(`Module \`${moduleToEnable}\` is already enabled`);
+			} else {
+				if (store.enabledModules === undefined) store.enabledModules = {};
+				if (store.enabledModules[interaction.guildID] === undefined) store.enabledModules[interaction.guildID] = [];
+				store.enabledModules[interaction.guildID].push(moduleToEnable);
+				// Register all modules commands
+				modules[moduleToEnable].commands.forEach(command => {
+					interaction.guild.commands.add(command);
+				});
+				interaction.reply(`Module \`${moduleToEnable}\` has been enabled`);
+			}
+			break;
+		}
 		default:
 			break;
 	}
