@@ -50,6 +50,10 @@ function onMessage(message) {
 function onInteraction(interaction) {
 	// Ignore anything thats not a command
 	if (!interaction.isCommand()) { return; }
+	// Check for modules command
+	if (interaction.commandName === 'modules') {
+		modulesCommand(interaction);
+	}
 	// For each module
 	for (const moduleName in modules) {
 		if (!Object.hasOwnProperty.call(modules, moduleName)) continue;
@@ -117,6 +121,76 @@ async function onReady() {
 		}
 	});
 
+	bot.application.commands.create({
+		name: 'modules',
+		description: 'Module Settings',
+		defaultPermission: false,
+		options: [
+			{
+				name: 'list',
+				type: 'SUB_COMMAND',
+				description: 'Change guild Settings for birthday module',
+				options: [
+					{
+						name: 'filter',
+						type: 'STRING',
+						description: 'What modules to list',
+						required: false,
+						choices: [
+							{
+								name: 'All',
+								value: 'all',
+							},
+							{
+								name: 'Enabled',
+								value: 'enabled',
+							},
+						],
+					},
+				],
+			},
+			{
+				name: 'enable',
+				type: 'SUB_COMMAND',
+				description: 'Enable a module on this guild',
+				options: [
+					{
+						name: 'module-name',
+						type: 'STRING',
+						description: 'What module to enable',
+						required: true,
+					},
+				],
+			},
+			{
+				name: 'disable',
+				type: 'SUB_COMMAND',
+				description: 'Disable a module on this guild',
+				options: [
+					{
+						name: 'module-name',
+						type: 'STRING',
+						description: 'What module to disable',
+						required: true,
+					},
+				],
+			},
+			{
+				name: 'cleanup',
+				type: 'SUB_COMMAND',
+				description: 'Remove all commands and re add them',
+				options: [
+					{
+						name: 'module-name',
+						type: 'STRING',
+						description: 'What module to disable',
+						required: true,
+					},
+				],
+			},
+		],
+	});
+
 	// Interval Functions
 	bot.setInterval(() => {
 		// For each module
@@ -156,6 +230,12 @@ function onError(error) {
 
 
 */
+
+async function modulesCommand(interaction) {
+	let options = interaction.options[0].options;
+	let subcommand = interaction.options[0].value;
+	interaction.reply('Not yet implemented');
+}
 
 /**
  * Called when the bot first starts
