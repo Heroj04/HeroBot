@@ -245,6 +245,23 @@ async function registerCommands() {
 async function modulesCommand(interaction) {
 	let options = interaction.options[0].options;
 	let subcommand = interaction.options[0].value;
+	switch (subcommand) {
+		case 'list': {
+			let reply = 'Available Modules\n';
+			let filter = options[0].value;
+			for (const moduleName in modules) {
+				if (!Object.hasOwnProperty.call(modules, moduleName)) continue;
+				const module = modules[moduleName];
+				if (filter === 'all' || (filter === 'enabled' && store.enabledModules?.[interaction.guildID]?.includes(moduleName))) {
+					reply += `${moduleName} - ${module.description}`;
+				}
+			}
+			interaction.reply(reply);
+			break;
+		}
+		default:
+			break;
+	}
 	interaction.reply('Not yet implemented');
 }
 
