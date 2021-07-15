@@ -277,6 +277,29 @@ async function modulesCommand(interaction) {
 			}
 			break;
 		}
+		case 'disable': {
+			let moduleToDisable = options[0].value;
+			if (module[moduleToDisable] === undefined) {
+				interaction.reply(`Module \`${moduleToDisable}\` does not exist`);
+			} else if (!store.enabledModules?.[interaction.guildID]?.includes(moduleToDisable)) {
+				interaction.reply(`Module \`${moduleToDisable}\` is not enabled`);
+			} else {
+				if (store.enabledModules === undefined) store.enabledModules = {};
+				if (store.enabledModules[interaction.guildID] === undefined) store.enabledModules[interaction.guildID] = [];
+				let enabledModuleIndex = store.enabledModules[interaction.guildID].indexOf(moduleToDisable);
+				store.enabledModules[interaction.guildID].splice(enabledModuleIndex, 1);
+				// Remove all modules commands
+				interaction.guild.commands.fetch().then(commands => {
+					commands.each(command => {
+						if (modules[moduleToDisable].commands.some(element => element.name === command.name)) {
+							command.delete();
+						}
+					});
+					interaction.reply(`Module \`${moduleToDisable}\` has been disabled`);
+				});
+			}
+			break;
+		}
 		default:
 			break;
 	}
