@@ -231,6 +231,10 @@ function onError(error) {
 
 */
 
+/**
+ * Function run to manage modules via a command
+ * @param {Discord.CommandInteraction} interaction The interaction that triggered the command
+ */
 async function modulesCommand(interaction) {
 	let options = interaction.options[0].options;
 	let subcommand = interaction.options[0].value;
