@@ -101,6 +101,52 @@ function onInteraction(interaction) {
  * Event Handler Function called once the bot has finished setting up with API
  */
 async function onReady() {
+	// Register commands
+	registerCommands();
+	// Interval Functions
+	bot.setInterval(() => {
+		// For each module
+		for (const moduleName in modules) {
+			if (!Object.hasOwnProperty.call(modules, moduleName)) continue;
+			const module = modules[moduleName];
+			// If Module Interval Function Exists
+			if (typeof module.runOnInterval === 'function') {
+				// Run the Function
+				module.runOnInterval({
+					bot: bot,
+					store: store[moduleName],
+				});
+			}
+		}
+	}, config.intervalFunctionTime);
+
+	console.log('ready');
+}
+
+/**
+ * Event Handler Function called when the bot encounters an API error
+ * @param {Error} error the error thrown
+ */
+function onError(error) {
+	console.log('ERROR: ', error.message);
+}
+
+/*
+
+    ____  _   _                 ______                _   _
+   / __ \| | | |               |  ____|              | | (_)
+  | |  | | |_| |__   ___ _ __  | |__ _   _ _ __   ___| |_ _  ___  _ __  ___
+  | |  | | __| '_ \ / _ \ '__| |  __| | | | '_ \ / __| __| |/ _ \| '_ \/ __|
+  | |__| | |_| | | |  __/ |    | |  | |_| | | | | (__| |_| | (_) | | | \__ \
+   \____/ \__|_| |_|\___|_|    |_|   \__,_|_| |_|\___|\__|_|\___/|_| |_|___/
+
+
+*/
+
+/**
+ * Register all the bots commands
+ */
+async function registerCommands() {
 	console.log('Registering Commands');
 	// Register commands on Guilds
 	let guildCollection = await bot.guilds.fetch();
@@ -190,46 +236,7 @@ async function onReady() {
 			},
 		],
 	});
-
-	// Interval Functions
-	bot.setInterval(() => {
-		// For each module
-		for (const moduleName in modules) {
-			if (!Object.hasOwnProperty.call(modules, moduleName)) continue;
-			const module = modules[moduleName];
-			// If Module Interval Function Exists
-			if (typeof module.runOnInterval === 'function') {
-				// Run the Function
-				module.runOnInterval({
-					bot: bot,
-					store: store[moduleName],
-				});
-			}
-		}
-	}, config.intervalFunctionTime);
-
-	console.log('ready');
 }
-
-/**
- * Event Handler Function called when the bot encounters an API error
- * @param {Error} error the error thrown
- */
-function onError(error) {
-	console.log('ERROR: ', error.message);
-}
-
-/*
-
-    ____  _   _                 ______                _   _
-   / __ \| | | |               |  ____|              | | (_)
-  | |  | | |_| |__   ___ _ __  | |__ _   _ _ __   ___| |_ _  ___  _ __  ___
-  | |  | | __| '_ \ / _ \ '__| |  __| | | | '_ \ / __| __| |/ _ \| '_ \/ __|
-  | |__| | |_| | | |  __/ |    | |  | |_| | | | | (__| |_| | (_) | | | \__ \
-   \____/ \__|_| |_|\___|_|    |_|   \__,_|_| |_|\___|\__|_|\___/|_| |_|___/
-
-
-*/
 
 /**
  * Function run to manage modules via a command
