@@ -148,25 +148,8 @@ function onError(error) {
  */
 async function registerCommands() {
 	console.log('Registering Commands');
-	// Register commands on Guilds
-	let guildCollection = await bot.guilds.fetch();
-	guildCollection.each(async partialGuild => {
-		let guild = await partialGuild.fetch();
-		// For each module
-		for (const moduleName in modules) {
-			if (!Object.hasOwnProperty.call(modules, moduleName)) continue;
-			const module = modules[moduleName];
-			// If this module is enabled on this guild
-			if (store.enabledModules?.[guild.id]?.includes(moduleName)) {
-				// For each command in each module
-				module.commands.forEach(command => {
-					// Register the command
-					guild.commands.create(command);
-				});
-			}
-		}
-	});
 
+	// Register System Commands
 	bot.application.commands.create({
 		name: 'modules',
 		description: 'Module Settings',
@@ -235,6 +218,25 @@ async function registerCommands() {
 				],
 			},
 		],
+	});
+
+	// Register commands on Guilds
+	let guildCollection = await bot.guilds.fetch();
+	guildCollection.each(async partialGuild => {
+		let guild = await partialGuild.fetch();
+		// For each module
+		for (const moduleName in modules) {
+			if (!Object.hasOwnProperty.call(modules, moduleName)) continue;
+			const module = modules[moduleName];
+			// If this module is enabled on this guild
+			if (store.enabledModules?.[guild.id]?.includes(moduleName)) {
+				// For each command in each module
+				module.commands.forEach(command => {
+					// Register the command
+					guild.commands.create(command);
+				});
+			}
+		}
 	});
 }
 
