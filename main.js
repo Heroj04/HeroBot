@@ -300,6 +300,21 @@ async function modulesCommand(interaction) {
 			}
 			break;
 		}
+		case 'cleanup': {
+			let appCommands = await bot.application.commands.fetch();
+			appCommands.each(command => {
+				command.delete();
+			});
+			let guilds = await bot.guilds.fetch();
+			guilds.each(async partialGuild => {
+				let guild = await partialGuild.fetch();
+				let guildCommands = await guild.commands.fetch();
+				guildCommands.each(command => {
+					command.delete();
+				});
+			});
+			break;
+		}
 		default:
 			break;
 	}
